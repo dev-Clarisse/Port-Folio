@@ -62,6 +62,7 @@
   --color-lilac-800: var(--deep-lilac);
   --color-lilac-900: var(--deep-lilac-2);
   --color-lilac-950: var(--deep-lilac-3);
+  --color-lilac-1000: var(--indigo);
   --color-black: var(--black);
   --color-white: var(--white);
 }
@@ -110,6 +111,7 @@
   --deep-lilac: #815ac0ff;
   --deep-lilac-2: #7251b5ff;
   --deep-lilac-3: #6247aaff;
+  --indigo: #4e148cff;
   --black: #000000;
   --white: white;
 }

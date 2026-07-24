@@ -44,7 +44,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#1a1025] text-white/80 px-10 py-4 flex flex-col sm:flex-row justify-between gap-10 ">
+    <footer className="fixed bottom-0 left-0 w-full z-50 bg-[#1a1025] text-white/80 px-10 py-4 flex flex-col sm:flex-row justify-between gap-10 ">
 
 
       <nav>

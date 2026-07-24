@@ -198,7 +198,19 @@
   width: 100%;
   flex: 1;
   background: #000000;
+}
+
+.crystal-layer {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
+  pointer-events: none; 
+  z-index: 0;
+}
+
+.content-layer {
+  position: relative;
+  z-index: 1;
 }
 
 .flowers {

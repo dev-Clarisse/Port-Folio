@@ -33,8 +33,11 @@ export default function Background({ children }: { children?: React.ReactNode })
     }, [])
 
     return (
-        <div ref={skyRef} className="background">
-            {children}
+        <div className="background">
+            <div ref={skyRef} className="crystal-layer" />
+            <div className="content-layer">
+                {children}
+            </div>
         </div>
     )
 }

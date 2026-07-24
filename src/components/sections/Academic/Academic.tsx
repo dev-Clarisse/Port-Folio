@@ -26,12 +26,12 @@ function Academic() {
                 <div className="flex flex-col gap-4">
                     <div className="flex ">
 
-                        <div className="relative -mt-[100px] -ml-[430px] w-100 h-100 mx-auto ">
+                        <div className="relative -mt-[100px] -ml-[430px]  w-100 h-100 mx-auto ">
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex items-center justify-center">
                                 <div className="flex flex-col gap-6 w-52 text-center text-lilac-100 text-lg leading-snug ">
-                                    <p className='text-black'>
+                                    <p className='text-lilac-1000'>
                                         Lycée Louis Thuillier
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
@@ -60,7 +60,7 @@ function Academic() {
                             <div className="absolute inset-0 z-10 flex items-center justify-center">
                                 <div className="flex flex-col gap-6 w-48 text-center text-lilac-100 text-lg leading-snug">
 
-                                    <p className='text-black'>
+                                    <p className='text-lilac-1000'>
                                         French Baccalaureate
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
@@ -93,12 +93,12 @@ function Academic() {
 
                     <div className='flex '>
 
-                        <div className="relative -mt-[80px] -ml-[320px] w-100 h-100 mx-auto ">
+                        <div className="relative -mt-[80px] -ml-[200px] w-100 h-100 mx-auto ">
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
                                 <div className="flex flex-col gap-6 w-54 text-center text-lilac-100 text-xl leading-snug">
-                                    <p className='text-black'>
+                                    <p className='text-lilac-1000'>
                                         Bachelor of Science in General Engineering
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
@@ -113,7 +113,7 @@ function Academic() {
                                         </div>
                                         <div className='flex gap-2 items-start'>
                                             <MapPin size={20} className=' shrink-0' />
-                                           Cachan
+                                            Cachan
                                         </div>
                                         <div className=' flex gap-2 '>
                                             <BookOpenText size={20} />
@@ -130,7 +130,7 @@ function Academic() {
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-7">
-                                <div className='w-48 text-center text-xl leading-snug text-black'>
+                                <div className='w-48 text-center text-xl leading-snug text-lilac-1000'>
                                     Digital and Intelligent Systems
                                 </div>
                                 <Dialog>
@@ -273,6 +273,7 @@ function Academic() {
             </div>
 
         </div>
+
 
     )
 }
