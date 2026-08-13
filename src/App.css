@@ -384,5 +384,14 @@
   }
 }
 
+@keyframes bloom-pop {
+    0%   { opacity: 0; transform: scale(0) rotate(-15deg); }
+    60%  { opacity: 1; transform: scale(1.2) rotate(5deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+
+
+
 
 

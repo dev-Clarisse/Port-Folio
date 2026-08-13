@@ -1,4 +1,5 @@
 import '@/App.css'
+import { useLayoutEffect, useRef, useState } from 'react';
 import FlowerBox from '@/components/Box/FlowerBox';
 import { Button } from "@/components/ui/button"
 import { Sound } from "@/Hooks/Sound"
@@ -16,35 +17,64 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import FlowerPath from '@/components/layout/FlowerPath/FlowerPath';
 
 
 function Academic() {
     const playClick = Sound("/sounds/clic.mp3");
+
+    const containerRef = useRef<HTMLDivElement>(null);
+    const box1Ref = useRef<HTMLDivElement>(null);
+    const box2Ref = useRef<HTMLDivElement>(null);
+    const box3Ref = useRef<HTMLDivElement>(null);
+    const box4Ref = useRef<HTMLDivElement>(null);
+    const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
+
+    useLayoutEffect(() => {
+        const container = containerRef.current;
+        const boxes = [box1Ref.current, box2Ref.current, box3Ref.current, box4Ref.current];
+        if (!container || boxes.some((b) => !b)) return;
+
+        const containerRect = container.getBoundingClientRect();
+        setPoints(
+            boxes.map((box) => {
+                const rect = box!.getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width / 2 - containerRect.left,
+                    y: rect.top + rect.height / 2 - containerRect.top,
+                };
+            })
+        );
+    }, []);
+
     return (
         <div className="flex flex-col">
-            <div style={{ position: 'relative', paddingTop: '90px', paddingLeft: '550px' }}>
+            <div ref={containerRef} style={{ position: 'relative', paddingTop: '90px', paddingLeft: '550px' }}>
+                
+                *{points.length === 4 && <FlowerPath points={points} />}
+                
                 <div className="flex flex-col gap-4">
                     <div className="flex ">
 
-                        <div className="relative -mt-[100px] -ml-[430px]  w-100 h-100 mx-auto ">
+                        <div ref={box1Ref} className="relative -mt-[100px] -ml-[430px]  w-100 h-100 mx-auto ">
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex items-center justify-center">
                                 <div className="flex flex-col gap-6 w-52 text-center text-lilac-100 text-lg leading-snug ">
-                                    <p className='text-lilac-1000'>
+                                    <p className='text-lilac-1000 underline'>
                                         Lycée Louis Thuillier
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
                                         <div className='flex gap-2'>
-                                            <CalendarDays size={20} />
+                                            <CalendarDays className='text-lilac-1100' size={20} />
                                             Sept 2019 – July 2022
                                         </div>
                                         <div className='flex gap-2'>
-                                            <MapPin size={20} />
+                                            <MapPin className='text-lilac-1100' size={20} />
                                             Amiens
                                         </div>
                                         <div className='flex gap-2'>
-                                            <BookOpenText size={20} />
+                                            <BookOpenText className='text-lilac-1100' size={20} />
                                             European classes
                                         </div>
                                     </div>
@@ -54,31 +84,31 @@ function Academic() {
                             </div>
                         </div>
 
-                        <div className="relative -mt-[100px] -mr-[-100px] w-100 h-100 mx-auto">
+                        <div ref={box2Ref} className="relative -mt-[100px] -mr-[-100px] w-100 h-100 mx-auto">
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex items-center justify-center">
                                 <div className="flex flex-col gap-6 w-48 text-center text-lilac-100 text-lg leading-snug">
 
-                                    <p className='text-lilac-1000'>
+                                    <p className='text-lilac-1000 underline'>
                                         French Baccalaureate
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
                                         <div className='flex gap-2'>
-                                            <BookOpenText size={20} />
+                                            <BookOpenText className='text-lilac-1100' size={20} />
                                             High Honors
                                         </div>
 
                                         <div className='flex gap-2'>
-                                            <CalendarDays size={20} />
+                                            <CalendarDays className='text-lilac-1100' size={20} />
                                             July 2022
                                         </div>
                                         <div className='flex gap-2'>
-                                            <MapPin size={20} />
+                                            <MapPin className='text-lilac-1100' size={20} />
                                             Amiens
                                         </div>
                                         <div className='text-sm flex gap-2 items-start'>
-                                            <BookOpenText size={20} className='shrink-0' />
+                                            <BookOpenText size={20} className='shrink-0 text-lilac-1100' />
                                             Science specialities, Advanced Mathematics
                                         </div>
                                     </div>
@@ -93,30 +123,30 @@ function Academic() {
 
                     <div className='flex '>
 
-                        <div className="relative -mt-[80px] -ml-[200px] w-100 h-100 mx-auto ">
+                        <div ref={box3Ref} className="relative -mt-[80px] -ml-[200px] w-100 h-100 mx-auto ">
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
                                 <div className="flex flex-col gap-6 w-54 text-center text-lilac-100 text-xl leading-snug">
-                                    <p className='text-lilac-1000'>
+                                    <p className='text-lilac-1000 underline'>
                                         Bachelor of Science in General Engineering
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
 
                                         <div className='flex gap-2'>
-                                            <CalendarDays size={20} />
+                                            <CalendarDays className='text-lilac-1100' size={20} />
                                             Sept 2022 - Nov 2027
                                         </div>
                                         <div className='flex gap-2 items-start'>
-                                            <School size={20} className=' shrink-0' />
+                                            <School size={20} className=' shrink-0 text-lilac-1100' />
                                             EPF Paris-Cachan
                                         </div>
                                         <div className='flex gap-2 items-start'>
-                                            <MapPin size={20} className=' shrink-0' />
+                                            <MapPin size={20} className='shrink-0 text-lilac-1100 ' />
                                             Cachan
                                         </div>
                                         <div className=' flex gap-2 '>
-                                            <BookOpenText size={20} />
+                                            <BookOpenText className='text-lilac-1100' size={20} />
                                             current training
                                         </div>
                                     </div>
@@ -126,11 +156,11 @@ function Academic() {
                             </div>
                         </div>
 
-                        <div className="relative -mt-[80px] -ml-[240px] w-100 h-100 mx-auto ">
+                        <div ref={box4Ref} className="relative -mt-[80px] -ml-[240px] w-100 h-100 mx-auto ">
                             <FlowerBox className="absolute inset-0 w-full h-full" />
 
                             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-7">
-                                <div className='w-48 text-center text-xl leading-snug text-lilac-1000'>
+                                <div className='w-48 text-center text-xl leading-snug text-lilac-1000 underline'>
                                     Digital and Intelligent Systems
                                 </div>
                                 <Dialog>

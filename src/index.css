@@ -65,6 +65,7 @@
   --color-lilac-1000: var(--indigo);
   --color-black: var(--black);
   --color-white: var(--white);
+  --color-lilac-1100: var(--pastel-petal);
 }
 
 :root {
@@ -105,6 +106,7 @@
   --thistle-2: #dac3e8ff;
   --wisteria: #d2b7e5ff;
   --wisteria-2: #c19ee0ff;
+  --pastel-petal: #ffc8ddff;
   --bright-lavender: #b185dbff;
   --lavender-purple: #a06cd5ff;
   --lavender-purple-2: #9163cbff;

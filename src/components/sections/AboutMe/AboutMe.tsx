@@ -31,8 +31,8 @@ function AboutMe() {
 
                         </div>
 
-                        <div className="relative -mt-[70px] -mr-[-200px] w-150 h-150 mx-auto animate-slide-in-right">
-                            <FlowerBox className="absolute inset-0 w-full h-full" />
+                        <div className="relative -mt-[70px] -mr-[-200px] w-150 h-150 mx-auto animate-slide-in-right ">
+                            <FlowerBox className="absolute inset-0 w-full h-full  " />
 
                             <div className="absolute inset-0 z-10 flex items-center justify-center">
                                 <div className="flex flex-col gap-6 w-80 text-center leading-snug ">
@@ -51,6 +51,7 @@ function AboutMe() {
 
                                 </div>
                             </div>
+                           
                         </div>
 
 
