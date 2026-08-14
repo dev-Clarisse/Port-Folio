@@ -29,7 +29,8 @@ function Academic() {
     const box3Ref = useRef<HTMLDivElement>(null);
     const box4Ref = useRef<HTMLDivElement>(null);
     const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
-
+    const [pageHeight, setPageHeight] = useState<number | null>(null);
+    
     useLayoutEffect(() => {
         const container = containerRef.current;
         const boxes = [box1Ref.current, box2Ref.current, box3Ref.current, box4Ref.current];
@@ -45,14 +46,23 @@ function Academic() {
                 };
             })
         );
+
+        const measure = () => {
+            // Hauteur réelle de toute la page défilable, pas juste de l'écran
+            setPageHeight(document.documentElement.scrollHeight);
+        };
+
+        measure();
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
     }, []);
 
     return (
         <div className="flex flex-col">
-            <div ref={containerRef} style={{ position: 'relative', paddingTop: '90px', paddingLeft: '550px' }}>
-                
-                *{points.length === 4 && <FlowerPath points={points} />}
-                
+            <div ref={containerRef} style={{ position: 'relative', paddingTop: '90px', paddingLeft: '550px', minHeight: pageHeight ? `${pageHeight}px` : '70vh' }}>
+
+                {points.length === 4 && <FlowerPath points={points} />}
+
                 <div className="flex flex-col gap-4">
                     <div className="flex ">
 
