@@ -139,3 +139,8 @@ npm install react-router-dom
 # composant dialog
 
 - npx shadcn@latest add dialog
+
+# démo web 3D interactive
+
+- npm install three @react-three/fiber @react-three/drei
+- npm install -D @types/three

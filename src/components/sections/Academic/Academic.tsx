@@ -48,7 +48,6 @@ function Academic() {
         );
 
         const measure = () => {
-            // Hauteur réelle de toute la page défilable, pas juste de l'écran
             setPageHeight(document.documentElement.scrollHeight);
         };
 
@@ -139,7 +138,7 @@ function Academic() {
                             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3">
                                 <div className="flex flex-col gap-6 w-54 text-center text-lilac-100 text-xl leading-snug">
                                     <p className='text-lilac-1000 underline'>
-                                        Bachelor of Science in General Engineering
+                                        Master of Science in General Engineering
                                     </p>
                                     <div className='text-base flex flex-col gap-1'>
 
@@ -157,7 +156,7 @@ function Academic() {
                                         </div>
                                         <div className=' flex gap-2 '>
                                             <BookOpenText className='text-lilac-1100' size={20} />
-                                            current training
+                                            Ongoing
                                         </div>
                                     </div>
 
