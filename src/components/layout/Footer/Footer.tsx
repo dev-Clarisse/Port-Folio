@@ -141,14 +141,14 @@ export default function Footer() {
           </h6>
           <div className="flex gap-2">
 
-            <a href="https://github.com/tonpseudo" target="_blank" rel="noopener noreferrer" className="hover:drop-shadow-[0_0_8px_var(--lavender-purple)] transition">
+            <a href="https://github.com/dev-Clarisse" target="_blank" rel="noopener noreferrer" className="hover:drop-shadow-[0_0_8px_var(--lavender-purple)] transition">
               <FaGithub size={20} />
 
             </a>
 
 
 
-            <a href="https://linkedin.com/in/tonpseudo" target="_blank" rel="noopener noreferrer" className="hover:drop-shadow-[0_0_8px_var(--lavender-purple)] transition">
+            <a href="https://linkedin.com/in/clarisse-del-castillo" target="_blank" rel="noopener noreferrer" className="hover:drop-shadow-[0_0_8px_var(--lavender-purple)] transition">
               <IoLogoLinkedin size={20} />
             </a>
 
