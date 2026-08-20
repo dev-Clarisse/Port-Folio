@@ -8,10 +8,10 @@ function Skills() {
     return (
         <div className="flex flex-col items-center gap-8 pt-24 pb-16">
                     <h2 className="text-3xl text-lilac-1000 text-center">
-                        3D & Interactive
+                        Technical Skills
                     </h2>
                     <p className="text-lilac-1100 text-center max-w-md">
-                        Fais glisser pour faire pivoter le cristal.
+                        Frontend, Backend, Mobile, Data/ML, Tools&DevOps, Integrations
                     </p>
                     <CrystalScene />
                 </div>
