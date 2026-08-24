@@ -3,7 +3,7 @@ import { OrbitControls, Environment, Edges, Billboard, Text, PerspectiveCamera, 
 import { useRef } from "react";
 import type { Mesh, Group } from "three";
 
-type GeometryType = "tetrahedron" | "octahedron" | "icosahedron";
+type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "icosahedron2";
 
 type VertexLabel = { position: [number, number, number]; label: string };
 
@@ -27,6 +27,21 @@ const LABELS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
     ],
 
     icosahedron: [
+        { position: [0, 1, 1.5], label: "Angular" },
+        { position: [0, -1, 1.5], label: "JavaScript" },
+        { position: [1, 1.5, 0], label: "HTML5 / CSS3 / SCSS" },
+        { position: [-1, 1.5, 0], label: "Git / GitFlow" },
+        { position: [1.5, 0, 1], label: "" },
+        { position: [-1.5, 0, 1], label: "React Native" },
+        { position: [0, 1, -1.5], label: "Expo" },
+        { position: [0, -1, -1.5], label: "Stripe" },
+        { position: [1, -1.5, 0], label: "EmailJS" },
+        { position: [-1, -1.5, 0], label: "" },
+        { position: [1.5, 0, -1], label: "Web Audio API" },
+        { position: [-1.5, 0, -1], label: "LaTeX" },
+    ],
+
+    icosahedron2: [
         { position: [0, 1, 1.5], label: "Angular" },
         { position: [0, -1, 1.5], label: "JavaScript" },
         { position: [1, 1.5, 0], label: "HTML5 / CSS3 / SCSS" },
@@ -121,27 +136,34 @@ export default function CrystalScene() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     return (
-        <div ref={containerRef} className="relative w-full h-[600px] flex gap-4">
-            <View className="w-1/3 h-full">
-                <SceneContent cameraPosition={[8, 0, 0]} geometry="tetrahedron" />
-            </View>
+        <div ref={containerRef} className="relative w-full ">
 
-            <View className="w-1/3 h-full">
-                <SceneContent cameraPosition={[0, 8, 0]} geometry="octahedron" />
-            </View>
+            <div className="h-[600px] flex gap-4">
+                <View className="w-1/3 h-full">
+                    <SceneContent cameraPosition={[8, 0, 0]} geometry="tetrahedron" />
+                </View>
 
-            <View className="w-1/3 h-full">
-                <SceneContent cameraPosition={[0, 0, 8]} geometry="icosahedron" />
-            </View>
+                <View className="w-1/3 h-full">
+                    <SceneContent cameraPosition={[0, 8, 0]} geometry="octahedron" />
+                </View>
+
+                <View className="w-1/3 h-full">
+                    <SceneContent cameraPosition={[0, 0, 8]} geometry="icosahedron" />
+                </View>
+            </div>
+
 
             <Canvas
                 dpr={[1, 1.5]}
-                className="!absolute !inset-0 !pointer-events-none"
+                className="!fixed !inset-0 !pointer-events-none"
                 eventSource={containerRef as React.RefObject<HTMLElement>}
                 eventPrefix="client"
             >
                 <View.Port />
             </Canvas>
+
+
+
         </div>
 
 
