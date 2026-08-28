@@ -1,7 +1,11 @@
 import { Canvas, useFrame, type ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Environment, Edges, Billboard, Text, PerspectiveCamera, View } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 import type { Mesh, Group } from "three";
+import { Button } from "@/components/ui/button"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Cancel01Icon } from "@hugeicons/core-free-icons"
+
 
 type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "icosahedron2";
 
@@ -80,7 +84,7 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
     "LaTeX": "Description à compléter...",
 };
 
-type SelectedSkill = { geometry: GeometryType; label: string };
+type SelectedSkill = { geometry: GeometryType; label: string, origin: { x: number; y: number }; };
 
 function Crystal({
     geometry = "octahedron",
@@ -90,7 +94,7 @@ function Crystal({
 }: {
     geometry?: GeometryType
     isFrozen: boolean,
-    onSkillClick: (label: string) => void;
+    onSkillClick: (label: string, origin: { x: number; y: number }) => void;
 }) {
 
     const meshRef = useRef<Mesh>(null);
@@ -107,9 +111,9 @@ function Crystal({
     const labels = SKILLS_BY_GEOMETRY[geometry];
 
     const handleLabelClick = (label: string) => (e: ThreeEvent<MouseEvent>) => {
-        if (!label) return; 
+        if (!label) return;
         e.stopPropagation();
-        onSkillClick(label);
+        onSkillClick(label, { x: e.clientX, y: e.clientY });
     };
 
     return (
@@ -169,7 +173,7 @@ function SceneContent({
     cameraPosition: [number, number, number];
     geometry?: GeometryType;
     isFrozen: boolean;
-    onSkillClick: (label: string) => void;
+    onSkillClick: (label: string, origin: { x: number; y: number }) => void;
 }) {
     return (
         <>
@@ -184,25 +188,35 @@ function SceneContent({
     );
 }
 
-function SkillModal({ skill, onClose }: { skill: SelectedSkill; onClose: () => void }) {
+function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill; modalRef: React.RefObject<HTMLDivElement | null>; style: { left: number; top: number; opacity: number } | null; onClose: () => void }) {
+
+    const displayStyle = style ?? { left: skill.origin.x + 20, top: skill.origin.y, opacity: 0 };
+
+
+
+
     return (
         <div
-            className="fixed inset-0 z-50 h-75 flex items-center"
+            className="fixed inset-0 z-50"
             onClick={onClose}
         >
             <div
-                className="bg-lilac-950 border border-lilac-700 rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] max-w-md w-[90%] p-6"
+                ref={modalRef}
+                className="absolute bg-[#1a1025] border border-[var(--lavender-purple)] rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] w-[400px] max-w-[90%] p-6 transition-opacity duration-150"
+                style={displayStyle}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-start mb-4">
                     <h3 className="text-2xl text-lilac-100">{skill.label}</h3>
-                    <button
+                    <Button
                         onClick={onClose}
-                        className="text-lilac-300 hover:text-lilac-100 text-xl leading-none"
-                        aria-label="Fermer"
+                        className="text-lilac-300 text-xl leading-none"
+                        variant="ghost"
+                        size="icon-sm"
                     >
-                        ×
-                    </button>
+                        <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+                        <span className="sr-only">Close</span>
+                    </Button>
                 </div>
                 <p className="text-lilac-200">
                     {SKILL_DESCRIPTIONS[skill.label] ?? "Description à venir."}
@@ -212,15 +226,59 @@ function SkillModal({ skill, onClose }: { skill: SelectedSkill; onClose: () => v
     );
 }
 
+function ConnectorLine({
+    origin,
+    target,
+}: {
+    origin: { x: number; y: number };
+    target: { left: number; top: number };
+
+}) {
+
+    return (
+        <svg className="fixed inset-0 w-full h-full pointer-events-none z-40">
+            <line x1={origin.x} y1={origin.y} x2={target.left} y2={target.top} stroke="var(--lavender-purple)" strokeWidth={4} style={{ filter: "blur(4px)" }} opacity={0.5} />
+            <line x1={origin.x} y1={origin.y} x2={target.left} y2={target.top} stroke="#dec9e9" strokeWidth={1} />
+        </svg>
+    );
+}
+
 export default function CrystalScene() {
     const containerRef = useRef<HTMLDivElement>(null);
     const [selected, setSelected] = useState<SelectedSkill | null>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
+    const [modalStyle, setModalStyle] = useState<{ left: number; top: number; opacity: number } | null>(null);
 
-    const handleSkillClick = (geometry: GeometryType) => (label: string) => {
-        setSelected({ geometry, label });
+    const handleSkillClick = (geometry: GeometryType) => (label: string, origin: { x: number; y: number }) => {
+        setSelected({ geometry, label, origin });
+        setModalStyle(null);
     };
 
-    const closeModal = () => setSelected(null);
+    const closeModal = () => {
+        setSelected(null);
+        setModalStyle(null);
+    };
+
+    // Un seul calcul de position, source unique de vérité
+    useLayoutEffect(() => {
+        if (!selected || !modalRef.current) return;
+
+        const MARGIN = 16;
+        const rect = modalRef.current.getBoundingClientRect();
+
+        let left = selected.origin.x + 30;
+        let top = selected.origin.y - rect.height / 2;
+
+        left = Math.min(left, window.innerWidth - rect.width - MARGIN);
+        left = Math.max(left, MARGIN);
+        top = Math.min(top, window.innerHeight - rect.height - MARGIN);
+        top = Math.max(top, MARGIN);
+
+        setModalStyle({ left, top, opacity: 1 });
+    }, [selected]);
+
+    
+
 
     return (
         <div ref={containerRef} className="relative w-full ">
@@ -298,7 +356,14 @@ export default function CrystalScene() {
                 <View.Port />
             </Canvas>
 
-            {selected && <SkillModal skill={selected} onClose={closeModal} />}
+            {selected && (
+                <>
+                    <SkillModal skill={selected} modalRef={modalRef} style={modalStyle} onClose={closeModal} />
+                    {modalStyle && <ConnectorLine origin={selected.origin} target={modalStyle} />}
+                </>
+            )}
+
+
 
         </div>
 
