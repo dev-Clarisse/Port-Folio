@@ -1,10 +1,11 @@
-import { Canvas, useFrame, type ThreeEvent } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Environment, Edges, Billboard, Text, PerspectiveCamera, View } from "@react-three/drei";
 import { useRef, useState, useLayoutEffect } from "react";
 import type { Mesh, Group } from "three";
 import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Cancel01Icon } from "@hugeicons/core-free-icons"
+import { Vector3 } from "three";
 
 
 type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "icosahedron2";
@@ -86,19 +87,24 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
 
 type SelectedSkill = { geometry: GeometryType; label: string, origin: { x: number; y: number }; };
 
+
 function Crystal({
     geometry = "octahedron",
     isFrozen,
     onSkillClick,
+    viewRef,
+
 
 }: {
     geometry?: GeometryType
     isFrozen: boolean,
     onSkillClick: (label: string, origin: { x: number; y: number }) => void;
+    viewRef: React.RefObject<HTMLDivElement | null>;
 }) {
 
     const meshRef = useRef<Mesh>(null);
     const groupRef = useRef<Group>(null);
+    const { camera } = useThree();
 
     useFrame((_, delta) => {
         if (groupRef.current && !isFrozen) {
@@ -110,10 +116,29 @@ function Crystal({
 
     const labels = SKILLS_BY_GEOMETRY[geometry];
 
-    const handleLabelClick = (label: string) => (e: ThreeEvent<MouseEvent>) => {
+    const CRYSTAL_RADIUS = 1.5; // doit matcher le radius passé à tetrahedronGeometry/octahedronGeometry/icosahedronGeometry
+
+    const handleLabelClick = (label: string, vertexPosition: [number, number, number]) => (e: ThreeEvent<MouseEvent>) => {
         if (!label) return;
         e.stopPropagation();
-        onSkillClick(label, { x: e.clientX, y: e.clientY });
+
+        // Direction du label, mais point ramené sur la vraie surface du cristal (pas la position offset du label)
+        const surfacePoint = new Vector3(...vertexPosition).normalize().multiplyScalar(CRYSTAL_RADIUS);
+
+        const worldPos = groupRef.current
+            ? groupRef.current.localToWorld(surfacePoint)
+            : surfacePoint;
+
+        camera.updateMatrixWorld();
+        const ndc = worldPos.clone().project(camera);
+
+        const rect = viewRef.current?.getBoundingClientRect();
+        if (!rect) return;
+
+        const screenX = rect.left + (ndc.x * 0.5 + 0.5) * rect.width;
+        const screenY = rect.top + (1 - (ndc.y * 0.5 + 0.5)) * rect.height;
+
+        onSkillClick(label, { x: screenX, y: screenY });
     };
 
     return (
@@ -147,7 +172,7 @@ function Crystal({
                         anchorY="middle"
                         outlineWidth={0.01}
                         outlineColor="#4e148c"
-                        onClick={handleLabelClick(label)}
+                        onClick={handleLabelClick(label, position)}
                         onPointerOver={() => {
                             if (label) document.body.style.cursor = "pointer";
                         }}
@@ -169,11 +194,13 @@ function SceneContent({
     geometry,
     isFrozen,
     onSkillClick,
+    viewRef,
 }: {
     cameraPosition: [number, number, number];
     geometry?: GeometryType;
     isFrozen: boolean;
     onSkillClick: (label: string, origin: { x: number; y: number }) => void;
+    viewRef: React.RefObject<HTMLDivElement | null>;
 }) {
     return (
         <>
@@ -182,7 +209,7 @@ function SceneContent({
             <pointLight position={[5, 5, 5]} intensity={2} color="#c8a2d8" />
             <pointLight position={[-5, -5, -5]} intensity={1} color="#e6ccff" />
             <Environment resolution={128} frames={1} preset="studio" />
-            <Crystal geometry={geometry} isFrozen={isFrozen} onSkillClick={onSkillClick} />
+            <Crystal geometry={geometry} isFrozen={isFrozen} onSkillClick={onSkillClick} viewRef={viewRef} />
             <OrbitControls enablePan={false} enableZoom={false} />
         </>
     );
@@ -191,9 +218,6 @@ function SceneContent({
 function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill; modalRef: React.RefObject<HTMLDivElement | null>; style: { left: number; top: number; opacity: number } | null; onClose: () => void }) {
 
     const displayStyle = style ?? { left: skill.origin.x + 20, top: skill.origin.y, opacity: 0 };
-
-
-
 
     return (
         <div
@@ -229,25 +253,43 @@ function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill;
 function ConnectorLine({
     origin,
     target,
+
 }: {
     origin: { x: number; y: number };
-    target: { left: number; top: number };
+    target: { left: number; top: number; width: number; height: number };
+
 
 }) {
 
+    // const clampedY = Math.min(Math.max(origin.y, target.top), target.top + target.height);
+    const clampedY = Math.min(Math.max(origin.y, target.top), target.top + target.height);
+
+    let edgeX: number;
+    if (origin.x <= target.left) {
+        edgeX = target.left; // origine à gauche -> on touche le bord gauche
+    } else if (origin.x >= target.left + target.width) {
+        edgeX = target.left + target.width; // origine à droite -> bord droit
+    } else {
+        edgeX = origin.x; // origine "sous/sur" la modale -> pas de décalage horizontal
+    }
+
     return (
         <svg className="fixed inset-0 w-full h-full pointer-events-none z-40">
-            <line x1={origin.x} y1={origin.y} x2={target.left} y2={target.top} stroke="var(--lavender-purple)" strokeWidth={4} style={{ filter: "blur(4px)" }} opacity={0.5} />
-            <line x1={origin.x} y1={origin.y} x2={target.left} y2={target.top} stroke="#dec9e9" strokeWidth={1} />
+            <line x1={origin.x} y1={origin.y} x2={edgeX} y2={clampedY} stroke="var(--lavender-purple)" strokeWidth={4} style={{ filter: "blur(4px)" }} opacity={0.5} />
+            <line x1={origin.x} y1={origin.y} x2={edgeX} y2={clampedY} stroke="#dec9e9" strokeWidth={1} />
         </svg>
     );
 }
 
 export default function CrystalScene() {
+    const tetraViewRef = useRef<HTMLDivElement>(null);
+    const octaViewRef = useRef<HTMLDivElement>(null);
+    const icoViewRef = useRef<HTMLDivElement>(null);
+    const ico2ViewRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [selected, setSelected] = useState<SelectedSkill | null>(null);
     const modalRef = useRef<HTMLDivElement>(null);
-    const [modalStyle, setModalStyle] = useState<{ left: number; top: number; opacity: number } | null>(null);
+    const [modalStyle, setModalStyle] = useState<{ left: number; top: number; width: number; height: number; opacity: number } | null>(null);
 
     const handleSkillClick = (geometry: GeometryType) => (label: string, origin: { x: number; y: number }) => {
         setSelected({ geometry, label, origin });
@@ -259,14 +301,20 @@ export default function CrystalScene() {
         setModalStyle(null);
     };
 
-    // Un seul calcul de position, source unique de vérité
+
     useLayoutEffect(() => {
         if (!selected || !modalRef.current) return;
 
         const MARGIN = 16;
         const rect = modalRef.current.getBoundingClientRect();
 
-        let left = selected.origin.x + 30;
+        // Le cristal de droite (icosahedron) ouvre sa modale vers la gauche
+        // pour éviter qu'elle ne chevauche le cristal lui-même
+        const openLeft = selected.geometry === "icosahedron";
+
+        let left = openLeft
+            ? selected.origin.x - rect.width - 30
+            : selected.origin.x + 30;
         let top = selected.origin.y - rect.height / 2;
 
         left = Math.min(left, window.innerWidth - rect.width - MARGIN);
@@ -274,10 +322,10 @@ export default function CrystalScene() {
         top = Math.min(top, window.innerHeight - rect.height - MARGIN);
         top = Math.max(top, MARGIN);
 
-        setModalStyle({ left, top, opacity: 1 });
+        setModalStyle({ left, top, width: rect.width, height: rect.height, opacity: 1 });
     }, [selected]);
 
-    
+
 
 
     return (
@@ -296,30 +344,33 @@ export default function CrystalScene() {
             </div>
 
             <div className="h-[550px] flex">
-                <View className="w-1/3 h-full">
+                <View ref={tetraViewRef} className="w-1/3 h-full">
                     <SceneContent
                         cameraPosition={[8, 0, 0]}
                         geometry="tetrahedron"
                         isFrozen={selected?.geometry === "tetrahedron"}
                         onSkillClick={handleSkillClick("tetrahedron")}
+                        viewRef={tetraViewRef}
                     />
                 </View>
 
-                <View className="w-1/3 h-full">
+                <View ref={octaViewRef} className="w-1/3 h-full">
                     <SceneContent
                         cameraPosition={[0, 8, 0]}
                         geometry="octahedron"
                         isFrozen={selected?.geometry === "octahedron"}
                         onSkillClick={handleSkillClick("octahedron")}
+                        viewRef={octaViewRef}
                     />
                 </View>
 
-                <View className="w-1/3 h-full">
+                <View ref={icoViewRef} className="w-1/3 h-full">
                     <SceneContent
                         cameraPosition={[0, 0, 8]}
                         geometry="icosahedron"
                         isFrozen={selected?.geometry === "icosahedron"}
                         onSkillClick={handleSkillClick("icosahedron")}
+                        viewRef={icoViewRef}
                     />
                 </View>
             </div>
@@ -336,12 +387,13 @@ export default function CrystalScene() {
             </div>
 
             <div className="flex justify-center h-[550px]">
-                <View className="w-1/2 h-full">
+                <View ref={ico2ViewRef} className="w-1/2 h-full">
                     <SceneContent
                         cameraPosition={[8, 0, 0]}
                         geometry="icosahedron2"
                         isFrozen={selected?.geometry === "icosahedron2"}
                         onSkillClick={handleSkillClick("icosahedron2")}
+                        viewRef={ico2ViewRef}
                     />
                 </View>
             </div>
