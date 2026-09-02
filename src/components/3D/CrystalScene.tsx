@@ -12,6 +12,8 @@ type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "icosahedron2
 
 type VertexLabel = { position: [number, number, number]; label: string };
 
+const PHI = 1.618033988749895;
+
 const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
 
     tetrahedron: [
@@ -32,33 +34,33 @@ const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
     ],
 
     icosahedron: [
-        { position: [0, 1, 1.5], label: "Angular" },
-        { position: [0, -1, 1.5], label: "JavaScript" },
-        { position: [1, 1.5, 0], label: "HTML5 / CSS3 / SCSS" },
-        { position: [-1, 1.5, 0], label: "Git / GitFlow" },
-        { position: [1.5, 0, 1], label: "" },
-        { position: [-1.5, 0, 1], label: "React Native" },
-        { position: [0, 1, -1.5], label: "Expo" },
-        { position: [0, -1, -1.5], label: "Stripe" },
-        { position: [1, -1.5, 0], label: "EmailJS" },
-        { position: [-1, -1.5, 0], label: "" },
-        { position: [1.5, 0, -1], label: "Web Audio API" },
-        { position: [-1.5, 0, -1], label: "LaTeX" },
+        { position: [0, 1, PHI], label: "Angular" },
+        { position: [0, -1, PHI], label: "JavaScript" },
+        { position: [1, PHI, 0], label: "HTML5 / CSS3 / SCSS" },
+        { position: [-1, PHI, 0], label: "Git / GitFlow" },
+        { position: [PHI, 0, 1], label: "" },
+        { position: [-PHI, 0, 1], label: "React Native" },
+        { position: [0, 1, -PHI], label: "Expo" },
+        { position: [0, -1, -PHI], label: "Stripe" },
+        { position: [1, -PHI, 0], label: "EmailJS" },
+        { position: [-1, -PHI, 0], label: "" },
+        { position: [PHI, 0, -1], label: "Web Audio API" },
+        { position: [-PHI, 0, -1], label: "LaTeX" },
     ],
 
     icosahedron2: [
-        { position: [0, 1, 1.5], label: "Angular" },
-        { position: [0, -1, 1.5], label: "JavaScript" },
-        { position: [1, 1.5, 0], label: "HTML5 / CSS3 / SCSS" },
-        { position: [-1, 1.5, 0], label: "Git / GitFlow" },
-        { position: [1.5, 0, 1], label: "" },
-        { position: [-1.5, 0, 1], label: "React Native" },
-        { position: [0, 1, -1.5], label: "Expo" },
-        { position: [0, -1, -1.5], label: "Stripe" },
-        { position: [1, -1.5, 0], label: "EmailJS" },
-        { position: [-1, -1.5, 0], label: "" },
-        { position: [1.5, 0, -1], label: "Web Audio API" },
-        { position: [-1.5, 0, -1], label: "LaTeX" },
+        { position: [0, 1, PHI], label: "Angular" },
+        { position: [0, -1, PHI], label: "JavaScript" },
+        { position: [1, PHI, 0], label: "HTML5 / CSS3 / SCSS" },
+        { position: [-1, PHI, 0], label: "Git / GitFlow" },
+        { position: [PHI, 0, 1], label: "" },
+        { position: [-PHI, 0, 1], label: "React Native" },
+        { position: [0, 1, -PHI], label: "Expo" },
+        { position: [0, -1, -PHI], label: "Stripe" },
+        { position: [1, -PHI, 0], label: "EmailJS" },
+        { position: [-1, -PHI, 0], label: "" },
+        { position: [PHI, 0, -1], label: "Web Audio API" },
+        { position: [-PHI, 0, -1], label: "LaTeX" },
     ],
 };
 
@@ -93,6 +95,7 @@ function Crystal({
     isFrozen,
     onSkillClick,
     viewRef,
+    selectedLabel,
 
 
 }: {
@@ -100,6 +103,7 @@ function Crystal({
     isFrozen: boolean,
     onSkillClick: (label: string, origin: { x: number; y: number }) => void;
     viewRef: React.RefObject<HTMLDivElement | null>;
+    selectedLabel?: string;
 }) {
 
     const meshRef = useRef<Mesh>(null);
@@ -122,7 +126,7 @@ function Crystal({
         if (!label) return;
         e.stopPropagation();
 
-        // Direction du label, mais point ramené sur la vraie surface du cristal (pas la position offset du label)
+
         const surfacePoint = new Vector3(...vertexPosition).normalize().multiplyScalar(CRYSTAL_RADIUS);
 
         const worldPos = groupRef.current
@@ -162,29 +166,32 @@ function Crystal({
                 <Edges color="#dec9e9" threshold={0.3} />
             </mesh>
 
-            {labels.map(({ position, label }) => (
+            {labels.map(({ position, label }) => {
 
-                <Billboard key={label || `${position.join(",")}`} position={position}>
-                    <Text
-                        fontSize={0.22}
-                        color="#dec9e9"
-                        anchorX="center"
-                        anchorY="middle"
-                        outlineWidth={0.01}
-                        outlineColor="#4e148c"
-                        onClick={handleLabelClick(label, position)}
-                        onPointerOver={() => {
-                            if (label) document.body.style.cursor = "pointer";
-                        }}
-                        onPointerOut={() => {
-                            document.body.style.cursor = "auto";
-                        }}
-                    >
-                        {label}
-                    </Text>
-                </Billboard>
+                if (label === selectedLabel) return null;
 
-            ))}
+                return (
+                    <Billboard key={label || `${position.join(",")}`} position={position}>
+                        <Text
+                            fontSize={0.22}
+                            color="#dec9e9"
+                            anchorX="center"
+                            anchorY="middle"
+                            outlineWidth={0.01}
+                            outlineColor="#4e148c"
+                            onClick={handleLabelClick(label, position)}
+                            onPointerOver={() => {
+                                if (label) document.body.style.cursor = "pointer";
+                            }}
+                            onPointerOut={() => {
+                                document.body.style.cursor = "auto";
+                            }}
+                        >
+                            {label}
+                        </Text>
+                    </Billboard>
+                );
+            })}
         </group>
     );
 }
@@ -195,12 +202,14 @@ function SceneContent({
     isFrozen,
     onSkillClick,
     viewRef,
+    selectedLabel,
 }: {
     cameraPosition: [number, number, number];
     geometry?: GeometryType;
     isFrozen: boolean;
     onSkillClick: (label: string, origin: { x: number; y: number }) => void;
     viewRef: React.RefObject<HTMLDivElement | null>;
+    selectedLabel?: string;
 }) {
     return (
         <>
@@ -209,7 +218,7 @@ function SceneContent({
             <pointLight position={[5, 5, 5]} intensity={2} color="#c8a2d8" />
             <pointLight position={[-5, -5, -5]} intensity={1} color="#e6ccff" />
             <Environment resolution={128} frames={1} preset="studio" />
-            <Crystal geometry={geometry} isFrozen={isFrozen} onSkillClick={onSkillClick} viewRef={viewRef} />
+            <Crystal geometry={geometry} isFrozen={isFrozen} onSkillClick={onSkillClick} viewRef={viewRef} selectedLabel={selectedLabel} />
             <OrbitControls enablePan={false} enableZoom={false} />
         </>
     );
@@ -308,8 +317,7 @@ export default function CrystalScene() {
         const MARGIN = 16;
         const rect = modalRef.current.getBoundingClientRect();
 
-        // Le cristal de droite (icosahedron) ouvre sa modale vers la gauche
-        // pour éviter qu'elle ne chevauche le cristal lui-même
+
         const openLeft = selected.geometry === "icosahedron";
 
         let left = openLeft
@@ -351,6 +359,7 @@ export default function CrystalScene() {
                         isFrozen={selected?.geometry === "tetrahedron"}
                         onSkillClick={handleSkillClick("tetrahedron")}
                         viewRef={tetraViewRef}
+                        selectedLabel={selected?.geometry === "tetrahedron" ? selected.label : undefined}
                     />
                 </View>
 
@@ -361,6 +370,7 @@ export default function CrystalScene() {
                         isFrozen={selected?.geometry === "octahedron"}
                         onSkillClick={handleSkillClick("octahedron")}
                         viewRef={octaViewRef}
+                        selectedLabel={selected?.geometry === "octahedron" ? selected.label : undefined}
                     />
                 </View>
 
@@ -371,6 +381,7 @@ export default function CrystalScene() {
                         isFrozen={selected?.geometry === "icosahedron"}
                         onSkillClick={handleSkillClick("icosahedron")}
                         viewRef={icoViewRef}
+                        selectedLabel={selected?.geometry === "icosahedron" ? selected.label : undefined}
                     />
                 </View>
             </div>
@@ -394,6 +405,7 @@ export default function CrystalScene() {
                         isFrozen={selected?.geometry === "icosahedron2"}
                         onSkillClick={handleSkillClick("icosahedron2")}
                         viewRef={ico2ViewRef}
+                        selectedLabel={selected?.geometry === "icosahedron2" ? selected.label : undefined}
                     />
                 </View>
             </div>
@@ -414,8 +426,6 @@ export default function CrystalScene() {
                     {modalStyle && <ConnectorLine origin={selected.origin} target={modalStyle} />}
                 </>
             )}
-
-
 
         </div>
 
