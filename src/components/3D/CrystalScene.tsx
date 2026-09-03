@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Cancel01Icon } from "@hugeicons/core-free-icons"
 import { Vector3 } from "three";
+import { Sound } from "@/Hooks/Sound"
 
 
 type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "icosahedron2";
@@ -20,7 +21,7 @@ const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
 
         { position: [1, 1, 1], label: "TypeScript" },
         { position: [-1, -1, 1], label: "React" },
-        { position: [-1, 1, -1], label: "Tailwind CSS" },
+        { position: [-1, 1, -1], label: "Tailwind CSS / Bootstrap" },
         { position: [1, -1, -1], label: "REST APIs" },
     ],
 
@@ -49,18 +50,18 @@ const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
     ],
 
     icosahedron2: [
-        { position: [0, 1, PHI], label: "Angular" },
-        { position: [0, -1, PHI], label: "JavaScript" },
-        { position: [1, PHI, 0], label: "HTML5 / CSS3 / SCSS" },
-        { position: [-1, PHI, 0], label: "Git / GitFlow" },
+        { position: [0, 1, PHI], label: "Adaptability" },
+        { position: [0, -1, PHI], label: "" },
+        { position: [1, PHI, 0], label: "" },
+        { position: [-1, PHI, 0], label: "Teamwork" },
         { position: [PHI, 0, 1], label: "" },
-        { position: [-PHI, 0, 1], label: "React Native" },
-        { position: [0, 1, -PHI], label: "Expo" },
-        { position: [0, -1, -PHI], label: "Stripe" },
-        { position: [1, -PHI, 0], label: "EmailJS" },
+        { position: [-PHI, 0, 1], label: "" },
+        { position: [0, 1, -PHI], label: "Autonomy" },
+        { position: [0, -1, -PHI], label: "Problem solving" },
+        { position: [1, -PHI, 0], label: "Fast Learner" },
         { position: [-1, -PHI, 0], label: "" },
-        { position: [PHI, 0, -1], label: "Web Audio API" },
-        { position: [-PHI, 0, -1], label: "LaTeX" },
+        { position: [PHI, 0, -1], label: "" },
+        { position: [-PHI, 0, -1], label: "Cross-Cultural communication" },
     ],
 };
 
@@ -224,23 +225,25 @@ function SceneContent({
     );
 }
 
-function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill; modalRef: React.RefObject<HTMLDivElement | null>; style: { left: number; top: number; opacity: number } | null; onClose: () => void }) {
+function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill; modalRef: React.RefObject<HTMLDivElement | null>; style: { left: number; top: number } | null; onClose: () => void }) {
 
-    const displayStyle = style ?? { left: skill.origin.x + 20, top: skill.origin.y, opacity: 0 };
+    const displayStyle = style ?? { left: skill.origin.x + 20, top: skill.origin.y };
 
     return (
         <div
             className="fixed inset-0 z-50"
             onClick={onClose}
         >
+           
             <div
                 ref={modalRef}
-                className="absolute bg-[#1a1025] border border-[var(--lavender-purple)] rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] w-[400px] max-w-[90%] p-6 transition-opacity duration-150"
+                className="absolute bg-[#1a1025]/90 border border-[var(--lavender-purple)] rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] w-[400px] max-w-[90%] p-6 transition-opacity duration-150"
                 style={displayStyle}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-2xl text-lilac-100">{skill.label}</h3>
+                    
+                    <h3 className="text-2xl text-[var(--lavender-purple)]">{skill.label}</h3>
                     <Button
                         onClick={onClose}
                         className="text-lilac-300 text-xl leading-none"
@@ -259,34 +262,98 @@ function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill;
     );
 }
 
+
+
+function buildElbowPath(
+    origin: { x: number; y: number },
+    edgeX: number,
+    anchorY: number,
+    firstSegmentLength: number 
+) {
+    const dirX = edgeX >= origin.x ? 1 : -1;
+
+    if (Math.abs(anchorY - origin.y) < 0.01) {
+        return `M ${origin.x} ${origin.y} L ${edgeX} ${anchorY}`;
+    }
+
+    const bendX = origin.x + dirX * firstSegmentLength;
+
+    return `
+        M ${origin.x} ${origin.y}
+        L ${bendX} ${origin.y}
+        L ${edgeX} ${anchorY}
+    `;
+}
+
 function ConnectorLine({
     origin,
     target,
-
 }: {
     origin: { x: number; y: number };
     target: { left: number; top: number; width: number; height: number };
-
-
 }) {
-
-    // const clampedY = Math.min(Math.max(origin.y, target.top), target.top + target.height);
-    const clampedY = Math.min(Math.max(origin.y, target.top), target.top + target.height);
+    const CORNER_MARGIN = 24;
+    const RISE = 40;
+    const FIRST_SEGMENT_LENGTH = 35; 
 
     let edgeX: number;
     if (origin.x <= target.left) {
-        edgeX = target.left; // origine à gauche -> on touche le bord gauche
+        edgeX = target.left;
     } else if (origin.x >= target.left + target.width) {
-        edgeX = target.left + target.width; // origine à droite -> bord droit
+        edgeX = target.left + target.width;
     } else {
-        edgeX = origin.x; // origine "sous/sur" la modale -> pas de décalage horizontal
+        edgeX = origin.x;
     }
+
+    const edgeTop = target.top + CORNER_MARGIN;
+    const edgeBottom = target.top + target.height - CORNER_MARGIN;
+
+    const anchorY = edgeTop <= edgeBottom
+        ? Math.min(Math.max(origin.y - RISE, edgeTop), edgeBottom)
+        : target.top + target.height / 2;
+
+    const d = buildElbowPath(origin, edgeX, anchorY, FIRST_SEGMENT_LENGTH);
 
     return (
         <svg className="fixed inset-0 w-full h-full pointer-events-none z-40">
-            <line x1={origin.x} y1={origin.y} x2={edgeX} y2={clampedY} stroke="var(--lavender-purple)" strokeWidth={4} style={{ filter: "blur(4px)" }} opacity={0.5} />
-            <line x1={origin.x} y1={origin.y} x2={edgeX} y2={clampedY} stroke="#dec9e9" strokeWidth={1} />
+            <path d={d} fill="none" stroke="var(--lavender-purple)" strokeWidth={4} style={{ filter: "blur(4px)" }} opacity={0.5} />
+            <path d={d} fill="none" stroke="#dec9e9" strokeWidth={1} />
         </svg>
+    );
+}
+
+
+function FocusBlurOverlay({ rect }: { rect: DOMRect | null }) {
+    return (
+        <div
+            className={`fixed inset-0 z-30 pointer-events-none transition-opacity duration-500 ${rect ? "opacity-100" : "opacity-0"
+                }`}
+        >
+            {rect && (
+                <>
+                    {/* Bande du haut */}
+                    <div
+                        className="absolute backdrop-blur-md bg-black/10"
+                        style={{ top: 0, left: 0, right: 0, height: rect.top }}
+                    />
+                    {/* Bande du bas */}
+                    <div
+                        className="absolute backdrop-blur-md bg-black/10"
+                        style={{ top: rect.top + rect.height, left: 0, right: 0, bottom: 0 }}
+                    />
+                    {/* Bande de gauche */}
+                    <div
+                        className="absolute backdrop-blur-md bg-black/10"
+                        style={{ top: rect.top, left: 0, width: rect.left, height: rect.height }}
+                    />
+                    {/* Bande de droite */}
+                    <div
+                        className="absolute backdrop-blur-md bg-black/10"
+                        style={{ top: rect.top, left: rect.left + rect.width, right: 0, height: rect.height }}
+                    />
+                </>
+            )}
+        </div>
     );
 }
 
@@ -297,23 +364,56 @@ export default function CrystalScene() {
     const ico2ViewRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [selected, setSelected] = useState<SelectedSkill | null>(null);
-    const modalRef = useRef<HTMLDivElement>(null);
-    const [modalStyle, setModalStyle] = useState<{ left: number; top: number; width: number; height: number; opacity: number } | null>(null);
+    const modalRef = useRef<HTMLDivElement | null>(null);
+    const [modalStyle, setModalStyle] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+    const [activeRect, setActiveRect] = useState<DOMRect | null>(null);
+    const playClick = Sound("/sounds/clic.mp3");
+
+    const viewRefsByGeometry: Record<GeometryType, React.RefObject<HTMLDivElement | null>> = {
+        tetrahedron: tetraViewRef,
+        octahedron: octaViewRef,
+        icosahedron: icoViewRef,
+        icosahedron2: ico2ViewRef,
+    };
 
     const handleSkillClick = (geometry: GeometryType) => (label: string, origin: { x: number; y: number }) => {
         setSelected({ geometry, label, origin });
         setModalStyle(null);
+        playClick();
     };
 
     const closeModal = () => {
         setSelected(null);
         setModalStyle(null);
+        playClick();
     };
+
+    const CONNECTOR_OFFSET = 55;
 
 
     useLayoutEffect(() => {
-        if (!selected || !modalRef.current) return;
 
+        if (!selected) {
+            setActiveRect(null);
+            return;
+        }
+        const updateRect = () => {
+            const el = viewRefsByGeometry[selected.geometry].current;
+            if (el) setActiveRect(el.getBoundingClientRect());
+        };
+
+        updateRect();
+        window.addEventListener("resize", updateRect);
+        window.addEventListener("scroll", updateRect, true); 
+        return () => {
+            window.removeEventListener("resize", updateRect);
+            window.removeEventListener("scroll", updateRect, true);
+        };
+    }, [selected]);
+
+    useLayoutEffect(() => {
+
+        if (!selected || !modalRef.current) return;
         const MARGIN = 16;
         const rect = modalRef.current.getBoundingClientRect();
 
@@ -321,8 +421,8 @@ export default function CrystalScene() {
         const openLeft = selected.geometry === "icosahedron";
 
         let left = openLeft
-            ? selected.origin.x - rect.width - 30
-            : selected.origin.x + 30;
+            ? selected.origin.x - rect.width - CONNECTOR_OFFSET
+            : selected.origin.x + CONNECTOR_OFFSET;
         let top = selected.origin.y - rect.height / 2;
 
         left = Math.min(left, window.innerWidth - rect.width - MARGIN);
@@ -330,7 +430,7 @@ export default function CrystalScene() {
         top = Math.min(top, window.innerHeight - rect.height - MARGIN);
         top = Math.max(top, MARGIN);
 
-        setModalStyle({ left, top, width: rect.width, height: rect.height, opacity: 1 });
+        setModalStyle({ left, top, width: rect.width, height: rect.height});
     }, [selected]);
 
 
@@ -413,12 +513,14 @@ export default function CrystalScene() {
 
             <Canvas
                 dpr={[1, 1.5]}
-                className="!fixed !inset-0 !pointer-events-none"
+                className="!fixed !inset-0 !pointer-events-none z-10"
                 eventSource={containerRef as React.RefObject<HTMLElement>}
                 eventPrefix="client"
             >
                 <View.Port />
             </Canvas>
+
+            <FocusBlurOverlay rect={activeRect} />
 
             {selected && (
                 <>
