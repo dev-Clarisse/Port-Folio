@@ -137,7 +137,7 @@ export default function Footer() {
       <nav >
         <div className="flex  items-center gap-4">
           <h6 className="text-lg font-semibold text-[var(--lavender-purple)]">
-            Réseaux
+            Media
           </h6>
           <div className="flex gap-2">
 

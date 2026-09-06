@@ -144,3 +144,7 @@ npm install react-router-dom
 
 - npm install three @react-three/fiber @react-three/drei
 - npm install -D @types/three
+
+# déploiement Vercel
+
+déployé sur vercel

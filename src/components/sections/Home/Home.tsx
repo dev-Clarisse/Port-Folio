@@ -21,7 +21,7 @@ function Home() {
             <div style={{ position: 'relative', paddingTop: '450px', paddingLeft: '500px' }}>
 
                 <h1 className=" neon citation font-citation  text-lilac-950">
-                    ❝Il faut toute la vie pour apprendre à vivre❞
+                    ❝It takes a whole lifetime to learn how to live.❞
                 </h1>
                 <img className="flowers" src={flowersImg} alt="flowers" />
                 <div className="flex gap-3">
