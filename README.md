@@ -147,4 +147,5 @@ npm install react-router-dom
 
 # déploiement Vercel
 
-déployé sur vercel
+- npx vercel login
+- npx vercel --prod

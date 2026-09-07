@@ -65,27 +65,52 @@ const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
     ],
 };
 
-const SKILL_DESCRIPTIONS: Record<string, string> = {
-    "TypeScript": "Add description here...",
-    "React": "Add description here...",
-    "Tailwind CSS": "Add description here...",
-    "REST APIs": "Add description here...",
-    "Java": "Add description here...",
-    "PHP": "Add description here...",
-    "Spring / Spring Boot": "Add description here...",
-    "PostgreSQL": "Add description here...",
-    "Docker": "Add description here...",
-    "Python / Scikit-learn": "Add description here...",
-    "Angular": "Add description here...",
-    "JavaScript": "Add description here...",
-    "HTML5 / CSS3 / SCSS": "Add description here...",
-    "Git / GitFlow": "Add description here...",
-    "React Native": "Add description here...",
-    "Expo": "Add description here...",
-    "Stripe": "Add description here...",
-    "EmailJS": "Add description here...",
-    "Web Audio API": "Add description here...",
-    "LaTeX": "Add description here...",
+// const SKILL_DESCRIPTIONS: Record<string, String> = {
+//     "TypeScript": "Add description here...",
+//     "React": "Add description here...",
+//     "Tailwind CSS": "Add description here...",
+//     "REST APIs": "Add description here...",
+//     "Java": "Add description here...",
+//     "PHP": "Add description here...",
+//     "Spring / Spring Boot": "Add description here...",
+//     "PostgreSQL": "Add description here...",
+//     "Docker": "Add description here...",
+//     "Python / Scikit-learn": "Add description here...",
+//     "Angular": "Add description here...",
+//     "JavaScript": "Add description here...",
+//     "HTML5 / CSS3 / SCSS": "Add description here...",
+//     "Git / GitFlow": "Add description here...",
+//     "React Native": "Add description here...",
+//     "Expo": "Add description here...",
+//     "Stripe": "Add description here...",
+//     "EmailJS": "Add description here...",
+//     "Web Audio API": "Add description here...",
+//     "LaTeX": "Add description here...",
+// };
+
+type SkillDescription = {
+    highlights?: string[];
+};
+
+const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
+
+    "Python / Scikit-learn": {
+        highlights: [
+            "Data preprocessing and feature engineering",
+            "Classification: Logistic Regression, Decision Trees, Random Forests",
+            "Clustering: K-Means",
+            "Model evaluation and result interpretation",
+        ],
+    },
+    "PHP": {
+        highlights: [
+            "full-stack e-commerce website",
+            "Backend logic, user authentification, shopping cart management",
+            "Secure online payments via the Stripe API",
+            "Managing the database",
+        ],
+    },
+
 };
 
 type SelectedSkill = { geometry: GeometryType; label: string, origin: { x: number; y: number }; };
@@ -228,21 +253,24 @@ function SceneContent({
 function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill; modalRef: React.RefObject<HTMLDivElement | null>; style: { left: number; top: number } | null; onClose: () => void }) {
 
     const displayStyle = style ?? { left: skill.origin.x + 20, top: skill.origin.y };
+    const desc = SKILL_DESCRIPTIONS[skill.label];
 
     return (
         <div
             className="fixed inset-0 z-50"
             onClick={onClose}
         >
-           
+
             <div
                 ref={modalRef}
-                className="absolute bg-[#1a1025]/90 border border-[var(--lavender-purple)] rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] w-[400px] max-w-[90%] p-6 transition-opacity duration-150"
+                className="absolute bg-[#1a1025]/90 border border-[var(--lavender-purple)] rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] w-[400px] max-w-[90%] max-h-[70vh] overflow-y-auto p-6 transition-opacity duration-150 [scrollbar-width:thin] [scrollbar-color:var(--lavender-purple)_transparent]"
                 style={displayStyle}
                 onClick={(e) => e.stopPropagation()}
             >
+
+
                 <div className="flex justify-between items-start mb-4">
-                    
+
                     <h3 className="text-2xl text-[var(--lavender-purple)]">{skill.label}</h3>
                     <Button
                         onClick={onClose}
@@ -254,9 +282,15 @@ function SkillModal({ skill, modalRef, style, onClose }: { skill: SelectedSkill;
                         <span className="sr-only">Close</span>
                     </Button>
                 </div>
-                <p className="text-lilac-200">
-                    {SKILL_DESCRIPTIONS[skill.label] ?? "Description à venir."}
-                </p>
+                
+                {desc?.highlights ? (
+                    <ul className="list-disc list-inside text-lilac-200 space-y-1">
+                        {desc.highlights.map((h) => <li key={h}>{h}</li>)}
+                    </ul>
+                ) : (
+                    <p className="text-lilac-200">Description à venir.</p>
+                )}
+
             </div>
         </div>
     );
@@ -268,7 +302,7 @@ function buildElbowPath(
     origin: { x: number; y: number },
     edgeX: number,
     anchorY: number,
-    firstSegmentLength: number 
+    firstSegmentLength: number
 ) {
     const dirX = edgeX >= origin.x ? 1 : -1;
 
@@ -294,7 +328,7 @@ function ConnectorLine({
 }) {
     const CORNER_MARGIN = 24;
     const RISE = 40;
-    const FIRST_SEGMENT_LENGTH = 35; 
+    const FIRST_SEGMENT_LENGTH = 35;
 
     let edgeX: number;
     if (origin.x <= target.left) {
@@ -404,11 +438,22 @@ export default function CrystalScene() {
 
         updateRect();
         window.addEventListener("resize", updateRect);
-        window.addEventListener("scroll", updateRect, true); 
+        window.addEventListener("scroll", updateRect, true);
         return () => {
             window.removeEventListener("resize", updateRect);
             window.removeEventListener("scroll", updateRect, true);
         };
+    }, [selected]);
+
+    useLayoutEffect(() => {
+        if (selected) {
+            const originalOverflow = document.body.style.overflow;
+            document.body.style.overflow = "hidden";
+
+            return () => {
+                document.body.style.overflow = originalOverflow;
+            };
+        }
     }, [selected]);
 
     useLayoutEffect(() => {
@@ -430,7 +475,7 @@ export default function CrystalScene() {
         top = Math.min(top, window.innerHeight - rect.height - MARGIN);
         top = Math.max(top, MARGIN);
 
-        setModalStyle({ left, top, width: rect.width, height: rect.height});
+        setModalStyle({ left, top, width: rect.width, height: rect.height });
     }, [selected]);
 
 
