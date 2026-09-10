@@ -25,8 +25,8 @@ function AboutMe() {
 
                     <div className="flex ">
 
-                        <div className="relative -mt-[30px] -ml-[400px] w-90 h-90 mx-auto animate-slide-in-left">
-                            <FlowerBoxMe className="absolute inset-0 w-full h-full" image={imageMe} />
+                        <div className="relative -mt-[30px] -ml-[400px] w-90 h-90 mx-auto animate-slide-in-left" >
+                            <FlowerBoxMe className="absolute inset-0 w-full h-full" image={imageMe}  />
 
 
                         </div>

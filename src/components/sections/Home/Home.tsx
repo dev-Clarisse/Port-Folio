@@ -2,7 +2,7 @@ import { CircleUserRound, BookOpen, Zap, Sparkles, FolderGit2, BriefcaseBusiness
 
 
 import '@/App.css'
-import flowersImg from '@/assets/Flowers.png'
+import flowersImg from '@/assets/Flowers.webp'
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom";
 import { Sound } from "@/Hooks/Sound"
@@ -23,7 +23,7 @@ function Home() {
                 <h1 className=" neon citation font-citation  text-lilac-950">
                     ❝It takes a whole lifetime to learn how to live.❞
                 </h1>
-                <img className="flowers" src={flowersImg} alt="flowers" />
+                <img className="flowers" src={flowersImg} alt="flowers"fetchPriority="high" loading="eager" decoding="sync" />
                 <div className="flex gap-3">
                     <Button
                         onClick={() => {playClick(); 

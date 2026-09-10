@@ -31,7 +31,6 @@ export default function FlowerBoxMe({ className, image }: FlowerIconProps) {
                     </feMerge>
                 </filter>
             </defs>
-            <title>Flower</title>
 
 
             <path

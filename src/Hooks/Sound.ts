@@ -1,7 +1,7 @@
 import { useRef, useEffect, useCallback } from "react";
 
-// Un seul AudioContext partagé pour toute l'app (évite d'en recréer un par hook)
 let sharedContext: AudioContext | null = null;
+
 function getAudioContext() {
   if (!sharedContext) {
     sharedContext = new (window.AudioContext ||
@@ -10,10 +10,22 @@ function getAudioContext() {
   return sharedContext;
 }
 
+const audioBufferCache = new Map<string, AudioBuffer>();
+
 export function Sound(src: string, volume = 0.4) {
-  const bufferRef = useRef<AudioBuffer | null>(null);
+  const bufferRef = useRef<AudioBuffer | null>(audioBufferCache.get(src) || null);
+  const volumeRef = useRef(volume);
 
   useEffect(() => {
+    volumeRef.current = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    if (audioBufferCache.has(src)) {
+      bufferRef.current = audioBufferCache.get(src)!;
+      return;
+    }
+
     let cancelled = false;
     const ctx = getAudioContext();
 
@@ -21,7 +33,10 @@ export function Sound(src: string, volume = 0.4) {
       .then((res) => res.arrayBuffer())
       .then((arrayBuffer) => ctx.decodeAudioData(arrayBuffer))
       .then((decoded) => {
-        if (!cancelled) bufferRef.current = decoded;
+        if (!cancelled) {
+          audioBufferCache.set(src, decoded);
+          bufferRef.current = decoded;
+        }
       })
       .catch((err) => console.error("Erreur chargement audio:", err));
 
@@ -35,7 +50,6 @@ export function Sound(src: string, volume = 0.4) {
     const buffer = bufferRef.current;
     if (!buffer) return;
 
-   
     if (ctx.state === "suspended") {
       ctx.resume();
     }
@@ -44,11 +58,11 @@ export function Sound(src: string, volume = 0.4) {
     source.buffer = buffer;
 
     const gainNode = ctx.createGain();
-    gainNode.gain.value = volume;
+    gainNode.gain.value = volumeRef.current;
 
     source.connect(gainNode).connect(ctx.destination);
     source.start(0);
-  }, [volume]);
+  }, []);
 
   return play;
 }

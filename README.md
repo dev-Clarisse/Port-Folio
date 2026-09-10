@@ -112,6 +112,7 @@ npx shadcn@latest add button
 
 - Canva
 - "Remove bg" pour enlever le fond de l'image
+- Extension webp pour convertir du .png en .webp
 
 # logo lucide-react et react-icons
 
