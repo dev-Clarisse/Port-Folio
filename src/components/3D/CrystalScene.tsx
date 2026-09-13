@@ -8,7 +8,7 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { Vector3 } from "three";
 import { Sound } from "@/Hooks/Sound";
 
-type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "icosahedron2";
+type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "octahedron2" | "octahedron3";
 type VertexLabel = { position: [number, number, number]; label: string };
 
 const PHI = 1.618033988749895;
@@ -30,35 +30,38 @@ const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
   ],
   icosahedron: [
     { position: [0, 1, PHI], label: "Angular" },
-    { position: [0, -1, PHI], label: "" },
-    { position: [1, PHI, 0], label: "HTML5 / CSS3 / SCSS" },
-    { position: [-1, PHI, 0], label: "Git / GitFlow" },
-    { position: [PHI, 0, 1], label: "" },
+    { position: [0, -1, PHI], label: "HTML5 / CSS3 / SCSS" },
+    { position: [1, PHI, 0], label: "" },
+    { position: [-1, PHI, 0], label: "" },
+    { position: [PHI, 0, 1], label: "Git / GitFlow" },
     { position: [-PHI, 0, 1], label: "PostMan" },
     { position: [0, 1, -PHI], label: "Expo / Expo Go" },
     { position: [0, -1, -PHI], label: "Stripe" },
-    { position: [1, -PHI, 0], label: "EmailJS" },
-    { position: [-1, -PHI, 0], label: "" },
+    { position: [1, -PHI, 0], label: "" },
+    { position: [-1, -PHI, 0], label: "EmailJS" },
     { position: [PHI, 0, -1], label: "Web Audio API" },
     { position: [-PHI, 0, -1], label: "LaTeX" },
   ],
-  icosahedron2: [
-    { position: [0, 1, PHI], label: "Adaptability" },
-    { position: [0, -1, PHI], label: "" },
-    { position: [1, PHI, 0], label: "" },
-    { position: [-1, PHI, 0], label: "Teamwork" },
-    { position: [PHI, 0, 1], label: "" },
-    { position: [-PHI, 0, 1], label: "" },
-    { position: [0, 1, -PHI], label: "Autonomy" },
-    { position: [0, -1, -PHI], label: "Problem solving" },
-    { position: [1, -PHI, 0], label: "Fast Learner" },
-    { position: [-1, -PHI, 0], label: "" },
-    { position: [PHI, 0, -1], label: "" },
-    { position: [-PHI, 0, -1], label: "Cross-Cultural communication" },
+  octahedron2: [
+    { position: [1.8, 0, 0], label: "Adaptability" },
+    { position: [-1.8, 0, 0], label: "Teamwork" },
+    { position: [0, 1.8, 0], label: "Autonomy" },
+    { position: [0, -1.8, 0], label: "Problem solving" },
+    { position: [0, 0, 1.8], label: "Fast Learner" },
+    { position: [0, 0, -1.8], label: "Cross-Cultural communication" },
+  ],
+
+  octahedron3: [
+    { position: [1.8, 0, 0], label: "" },
+    { position: [-1.8, 0, 0], label: "" },
+    { position: [0, 1.8, 0], label: "English" },
+    { position: [0, -1.8, 0], label: "Spanish" },
+    { position: [0, 0, 1.8], label: "" },
+    { position: [0, 0, -1.8], label: "" },
   ],
 };
 
-type SkillDescription = { highlights?: string[] };
+type SkillDescription = { highlights?: string[]; pdfUrl?: string };
 
 const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
   "Python / Scikit-learn": {
@@ -200,6 +203,19 @@ const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
       "Communicated professionally and empathetically with international clients via email, helping them troubleshoot issues",
     ],
   },
+  "English": {
+    highlights: [
+      "B2+ level",
+      "Cambridge English Skills Test : 167"
+
+    ],
+    pdfUrl: "/pdfs/EST_Candidate_Test_Report.pdf"
+  },
+  "Spanish": {
+    highlights: [
+      "A2 Level",
+    ],
+  },
 };
 
 type SelectedSkill = { geometry: GeometryType; label: string; origin: { x: number; y: number } };
@@ -272,7 +288,8 @@ function Crystal({
         {geometry === "tetrahedron" && <tetrahedronGeometry args={[1.5, 0]} />}
         {geometry === "octahedron" && <octahedronGeometry args={[1.5, 0]} />}
         {geometry === "icosahedron" && <icosahedronGeometry args={[1.5, 0]} />}
-        {geometry === "icosahedron2" && <icosahedronGeometry args={[1.5, 0]} />}
+        {geometry === "octahedron2" && <octahedronGeometry args={[1.5, 0]} />}
+        {geometry === "octahedron3" && <octahedronGeometry args={[1.5, 0]} />}
         <meshPhysicalMaterial
           flatShading={true}
           color="#6247aa"
@@ -383,8 +400,23 @@ function SkillModal({
         ) : (
           <p className="text-lilac-200">Description à venir.</p>
         )}
+
+        {desc?.pdfUrl && (
+          <div className="flex justify-center mt-4">
+            <Button
+              asChild
+              className="text-base btn-glossy bg-lilac-950 text-lilac-100 transition-all duration-300 hover:drop-shadow-[0_0_20px_var(--color-lilac-400)]"
+            >
+              <a href={desc.pdfUrl} target="_blank" rel="noopener noreferrer">
+                Voir le PDF
+              </a>
+            </Button>
+          </div>
+        )}
+
+
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -471,11 +503,18 @@ const TECHNICAL_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, num
   { geometry: "icosahedron", cameraPosition: [0, 0, 8] },
 ];
 
+const SOFT_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
+  { geometry: "octahedron2", cameraPosition: [0, 8, 0] },
+  { geometry: "octahedron3", cameraPosition: [0, 8, 0] },
+];
+
+
 export default function CrystalScene() {
   const tetraViewRef = useRef<HTMLDivElement>(null);
   const octaViewRef = useRef<HTMLDivElement>(null);
   const icoViewRef = useRef<HTMLDivElement>(null);
-  const ico2ViewRef = useRef<HTMLDivElement>(null);
+  const octa2ViewRef = useRef<HTMLDivElement>(null);
+  const octa3ViewRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<SelectedSkill | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -506,7 +545,8 @@ export default function CrystalScene() {
     tetrahedron: tetraViewRef,
     octahedron: octaViewRef,
     icosahedron: icoViewRef,
-    icosahedron2: ico2ViewRef,
+    octahedron2: octa2ViewRef,
+    octahedron3: octa3ViewRef,
   };
 
   const handleSkillClick = useCallback(
@@ -557,6 +597,7 @@ export default function CrystalScene() {
       };
     }
   }, [selected]);
+
 
   useLayoutEffect(() => {
     if (!selected || !modalRef.current) return;
@@ -615,22 +656,25 @@ export default function CrystalScene() {
         </div>
       </div>
 
-      <div className="flex justify-center h-[550px]">
-        <View
-          ref={ico2ViewRef}
-          className="relative w-1/2 h-full overflow-hidden [clip-path:inset(0)]"
-        >
-          {hasMounted && (
-            <SceneContent
-              cameraPosition={[8, 0, 0]}
-              geometry="icosahedron2"
-              isFrozen={isCrystalFrozen("icosahedron2")}
-              onSkillClick={handleSkillClick("icosahedron2")}
-              viewRef={ico2ViewRef}
-              selectedLabel={selected?.geometry === "icosahedron2" ? selected.label : undefined}
-            />
-          )}
-        </View>
+      <div className=" justify-center h-[550px] flex">
+        {SOFT_CRYSTALS.map(({ geometry, cameraPosition }) => (
+          <View
+            key={geometry}
+            ref={viewRefsByGeometry[geometry]}
+            className="relative w-1/3 h-full overflow-hidden [clip-path:inset(0)]"
+          >
+            {hasMounted && (
+              <SceneContent
+                cameraPosition={cameraPosition}
+                geometry={geometry}
+                isFrozen={isCrystalFrozen(geometry)}
+                onSkillClick={handleSkillClick(geometry)}
+                viewRef={viewRefsByGeometry[geometry]}
+                selectedLabel={selected?.geometry === geometry ? selected.label : undefined}
+              />
+            )}
+          </View>
+        ))}
       </div>
 
       {hasMounted && (
