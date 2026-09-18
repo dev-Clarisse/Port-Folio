@@ -44,8 +44,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="fixed bottom-0 left-0 w-full z-50 bg-[#1a1025] text-white/80 px-10 py-4 flex flex-col sm:flex-row justify-between gap-10 ">
-
+    <footer className="fixed bottom-0 left-0 w-full z-50 isolate overflow-visible bg-[#1a1025] text-white/80 px-10 py-4 flex flex-col sm:flex-row justify-between gap-10 before:absolute before:inset-x-0 before:-top-8 before:h-8 before:bg-[#1a1025] before:content-['']">
 
       <nav>
         <div className="flex flex-col items-center gap-3">
