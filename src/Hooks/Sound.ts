@@ -14,44 +14,53 @@ const audioBufferCache = new Map<string, AudioBuffer>();
 
 export function Sound(src: string, volume = 0.4) {
   const bufferRef = useRef<AudioBuffer | null>(audioBufferCache.get(src) || null);
+  const loadPromiseRef = useRef<Promise<AudioBuffer | null> | null>(null);
   const volumeRef = useRef(volume);
 
   useEffect(() => {
     volumeRef.current = volume;
   }, [volume]);
 
-  useEffect(() => {
-    if (audioBufferCache.has(src)) {
-      bufferRef.current = audioBufferCache.get(src)!;
-      return;
+  const loadBuffer = useCallback(() => {
+    if (bufferRef.current) return Promise.resolve(bufferRef.current);
+    if (loadPromiseRef.current) return loadPromiseRef.current;
+
+    const cachedBuffer = audioBufferCache.get(src);
+    if (cachedBuffer) {
+      bufferRef.current = cachedBuffer;
+      return Promise.resolve(cachedBuffer);
     }
 
-    let cancelled = false;
+
     const ctx = getAudioContext();
 
-    fetch(src)
+    loadPromiseRef.current = fetch(src)
       .then((res) => res.arrayBuffer())
       .then((arrayBuffer) => ctx.decodeAudioData(arrayBuffer))
       .then((decoded) => {
-        if (!cancelled) {
-          audioBufferCache.set(src, decoded);
-          bufferRef.current = decoded;
-        }
-      })
-      .catch((err) => console.error("Erreur chargement audio:", err));
 
-    return () => {
-      cancelled = true;
-    };
+        audioBufferCache.set(src, decoded);
+        bufferRef.current = decoded;
+
+
+        return decoded;
+      })
+
+      .catch((err) => {
+        loadPromiseRef.current = null;
+        console.error("Erreur chargement audio:", err);
+        return null;
+      });
+    return loadPromiseRef.current;
   }, [src]);
 
-  const play = useCallback(() => {
+  const play = useCallback(async () => {
     const ctx = getAudioContext();
-    const buffer = bufferRef.current;
+    const buffer = await loadBuffer();
     if (!buffer) return;
 
     if (ctx.state === "suspended") {
-      ctx.resume();
+      await ctx.resume();
     }
 
     const source = ctx.createBufferSource();
@@ -62,7 +71,8 @@ export function Sound(src: string, volume = 0.4) {
 
     source.connect(gainNode).connect(ctx.destination);
     source.start(0);
-  }, []);
+  
+}, [loadBuffer]);
 
-  return play;
+return play;
 }

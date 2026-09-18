@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import emailjs from "@emailjs/browser";
 import { useRef, useState } from "react";
 import { Sound } from "@/Hooks/Sound"
 
@@ -20,27 +19,26 @@ export default function Footer() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const playClick = Sound("/sounds/clic.mp3");
 
-  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.current) return;
 
     setStatus("sending");
 
-    emailjs
-      .sendForm(
+   try {
+      const { default: emailjs } = await import("@emailjs/browser");
+      await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         form.current,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
-      .then(() => {
+      );
         setStatus("success");
-        form.current?.reset();
-      })
-      .catch((err) => {
+       form.current.reset();
+    } catch (err) {
         console.error(err);
         setStatus("error");
-      });
+    }
   };
 
   return (

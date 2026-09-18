@@ -23,7 +23,7 @@ function Home() {
                 <h1 className=" neon citation font-citation  text-lilac-950">
                     ❝It takes a whole lifetime to learn how to live.❞
                 </h1>
-                <img className="flowers" src={flowersImg} alt="flowers"fetchPriority="high" loading="eager" decoding="sync" />
+                <img className="flowers" src={flowersImg} alt="flowers" fetchPriority="high" loading="eager" decoding="async" />
                 <div className="flex gap-3">
                     <Button
                         onClick={() => {playClick(); 
