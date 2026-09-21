@@ -1,6 +1,5 @@
 import '@/App.css'
 import { useLayoutEffect, useRef, useState } from 'react';
-import FlowerBox from '@/components/Box/FlowerBox';
 import { Button } from "@/components/ui/button"
 import { Sound } from "@/Hooks/Sound"
 
@@ -30,7 +29,7 @@ function Academic() {
     const box1Ref = useRef<HTMLDivElement>(null);
     const box2Ref = useRef<HTMLDivElement>(null);
     const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
-    const [pageHeight, setPageHeight] = useState<number | null>(null);
+    // const [pageHeight, setPageHeight] = useState<number | null>(null);
     
     useLayoutEffect(() => {
         const container = containerRef.current;
@@ -48,13 +47,6 @@ function Academic() {
             })
         );
 
-        const measure = () => {
-            setPageHeight(document.documentElement.scrollHeight);
-        };
-
-        measure();
-        window.addEventListener('resize', measure);
-        return () => window.removeEventListener('resize', measure);
     }, []);
 
     return (
