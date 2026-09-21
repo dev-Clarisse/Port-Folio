@@ -9,7 +9,7 @@
 - Page "About me"
 - Add GitHib calendar
 - musique ✅
-- intégrer un bouton de retour en arrière
+- intégrer un bouton de retour en arrière ✅
 - changer la souris ✅
 - Choose a good palette ✅
 - belles animations aux changements de pages ✅
