@@ -5,10 +5,10 @@
 - Project Menu
 - Tools uses = Technologies uses
 - drop off my CV
-- put my social media : linkedin, GitHub 
+- put my social media : linkedin, GitHub ✅
 - Page "About me"
 - Add GitHib calendar
-- musique ?
+- musique ✅
 - intégrer un bouton de retour en arrière
 - changer la souris ✅
 - Choose a good palette ✅
@@ -29,8 +29,8 @@ https://asfakur-portfolio-nextjs.vercel.app/
 
 
 ```
-- Parler des expériences professionnelles
-- Ajouter les rapports de stage
+- Parler des expériences professionnelles ✅
+- Ajouter les rapports de stage ✅
 - expériences associatives (au sein de l'école)
 ```
 
@@ -41,7 +41,7 @@ https://asfakur-portfolio-nextjs.vercel.app/
 
 ```
 - Mes compétences (justification, ou je pense avoir acquis cette compétence, niveau (maitrisé, avancé, application, novice))
-- langues, parler de l'anglais et du certificat voltaire
+- langues, parler de l'anglais et du certificat voltaire ✅
 - Connaissances de soi (points forts, points faibles, ce que j'aime, ma devise)
 - Informatique, add a logiciel
 ```

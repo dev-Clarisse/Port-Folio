@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { Vector3 } from "three";
 import { Sound } from "@/Hooks/Sound";
+import { FileText } from "lucide-react";
 
 type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "octahedron2" | "octahedron3";
 type VertexLabel = { position: [number, number, number]; label: string };
@@ -57,7 +58,7 @@ const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
     { position: [0, 1.8, 0], label: "English" },
     { position: [0, -1.8, 0], label: "Spanish" },
     { position: [0, 0, 1.8], label: "" },
-    { position: [0, 0, -1.8], label: "" },
+    { position: [0, 0, -1.8], label: "French" },
   ],
 };
 
@@ -215,6 +216,12 @@ const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
     highlights: [
       "A2 Level",
     ],
+  },
+  "French": {
+    highlights: [
+      "Native",
+    ],
+    pdfUrl: "/pdfs/attestation_score_Voltaire.pdf"
   },
 };
 
@@ -408,7 +415,8 @@ function SkillModal({
               className="text-base btn-glossy bg-lilac-950 text-lilac-100 transition-all duration-300 hover:drop-shadow-[0_0_20px_var(--color-lilac-400)]"
             >
               <a href={desc.pdfUrl} target="_blank" rel="noopener noreferrer">
-                Voir le PDF
+                <FileText size={18} aria-hidden="true" />
+                View the certification
               </a>
             </Button>
           </div>
@@ -628,7 +636,7 @@ export default function CrystalScene() {
         </div>
       </div>
 
-      <div className="h-[550px] flex">
+      <div className="h-137.5 flex">
         {TECHNICAL_CRYSTALS.map(({ geometry, cameraPosition }) => (
           <View
             key={geometry}
