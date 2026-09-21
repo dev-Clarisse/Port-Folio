@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, MapPin, HeartHandshake, Store, FileText, ExternalLink } from "lucide-react";
+import { BriefcaseBusiness, MapPin, HeartHandshake, Store, FileText } from "lucide-react";
 import "@/App.css";
 import { Button } from "@/components/ui/button";
 
