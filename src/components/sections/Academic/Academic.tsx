@@ -1,5 +1,5 @@
 import '@/App.css'
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Sound } from "@/Hooks/Sound"
 
@@ -19,46 +19,61 @@ import {
 } from "@/components/ui/accordion"
 import FlowerPath from '@/components/layout/FlowerPath/FlowerPath';
 
-
 function Academic() {
-
-
     const playClick = Sound("/sounds/clic.mp3");
 
     const containerRef = useRef<HTMLDivElement>(null);
     const box1Ref = useRef<HTMLDivElement>(null);
     const box2Ref = useRef<HTMLDivElement>(null);
     const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
-    // const [pageHeight, setPageHeight] = useState<number | null>(null);
-    
+
     useLayoutEffect(() => {
-        const container = containerRef.current;
-        const boxes = [box1Ref.current, box2Ref.current];
-        if (!container || boxes.some((b) => !b)) return;
+        const updatePoints = () => {
+            const container = containerRef.current;
+            if (!container) return;
 
-        const containerRect = container.getBoundingClientRect();
-        setPoints(
-            boxes.map((box) => {
-                const rect = box!.getBoundingClientRect();
-                return {
-                    x: rect.left + rect.width / 2 - containerRect.left,
-                    y: rect.top + rect.height / 2 - containerRect.top,
-                };
-            })
-        );
+            const rect = container.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
 
+            const zigzagPoints = [
+                { x: -w * 0.25, y: -20 },
+                { x: w * 1.25, y: h * 0.25 },
+                { x: -w * 0.25, y: h * 0.50 },
+                { x: w * 1.25, y: h * 0.75 },
+                { x: w * 1.25, y: h + 40 }
+            ];
+
+            setPoints(zigzagPoints);
+        };
+
+        updatePoints();
+        window.addEventListener('resize', updatePoints);
+        return () => window.removeEventListener('resize', updatePoints);
+    }, []);
+
+    useEffect(() => {
+        const previousOverflow = document.body.style.overflow;
+
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = previousOverflow;
+        };
     }, []);
 
     return (
+        <div ref={containerRef} className="relative max-w-4xl mx-auto px-4 py-12 min-h-screen flex flex-col justify-center items-center">
+            {/* Arrière-plan SVG avec le zigzag */}
+            {points.length > 0 && <FlowerPath points={points} className="pointer-events-none" />}
 
-        <div ref={containerRef} className="relative max-w-4xl mx-auto px-4 py-12">
-            <div className="flex flex-col gap-6">
+            {/* Gap augmenté ici : gap-20 */}
+            <div className="flex flex-col items-center gap-10 relative z-10 w-full -translate-y-10">
 
-                {points.length === 2 && <FlowerPath points={points} />}
-
+                {/* CARD 1 - Master / Engineering */}
                 <div
                     ref={box2Ref}
-                    className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
+                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
                 >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-lilac-900/60">
                         <div className="flex items-center gap-3">
@@ -92,14 +107,12 @@ function Academic() {
                             </div>
                         </div>
 
-
                         <Dialog>
                             <DialogTrigger asChild>
                                 <Button
-                                    onClick={() => {
-                                        playClick();
-                                    }}
-                                    className=" text-base btn-glossy bg-lilac-950 text-lilac-100  transition-all duration-300 hover:drop-shadow-[0_0_20px_var(--color-lilac-400)]">
+                                    onClick={() => playClick()}
+                                    className="text-base btn-glossy bg-lilac-950 text-lilac-100 transition-all duration-300 hover:drop-shadow-[0_0_20px_var(--color-lilac-400)]"
+                                >
                                     Syllabus
                                 </Button>
                             </DialogTrigger>
@@ -109,7 +122,6 @@ function Academic() {
                                     <DialogTitle className="text-[var(--lavender-purple)]">
                                         Course Syllabus
                                     </DialogTitle>
-
                                 </DialogHeader>
                                 <p className="text-sm text-[var(--white)]/70">
                                     4th year
@@ -118,79 +130,62 @@ function Academic() {
                                     <div className="flex-column w-full">
                                         <Accordion type="single" collapsible className="w-full">
                                             <AccordionItem value="java" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    Java Programming Language
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>Java Programming Language</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Backend development with Spring Boot.
+                                                    Backend development with Spring Boot.<br />
                                                     Database integration via JPA/Hibernate.
                                                 </AccordionContent>
                                             </AccordionItem>
                                             <AccordionItem value="mobile-materials" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    Mobile Materials
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>Mobile Materials</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Kotlin application development.
+                                                    Kotlin application development.<br />
                                                     Experience with libraries such as OSMDroid for map integration.
                                                 </AccordionContent>
                                             </AccordionItem>
                                             <AccordionItem value="angular-js" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    Angular and JS
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>Angular and JS</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Front-end development with Angular and TypeScript.
+                                                    Front-end development with Angular and TypeScript.<br />
                                                     Creation of reusable components, service management, routing, and communication with REST APIs.
                                                 </AccordionContent>
                                             </AccordionItem>
                                             <AccordionItem value="symfony" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    Symfony Web Development
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>Symfony Web Development</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Development of an e-commerce website.
-                                                    Product, shopping cart, and order management.
+                                                    Development of an e-commerce website.<br />
+                                                    Product, shopping cart, and order management.<br />
                                                     Integration of the Stripe payment API.
                                                 </AccordionContent>
                                             </AccordionItem>
                                         </Accordion>
                                     </div>
-                                    {/* <div className="flex-column"> */}
                                     <div className="flex-column w-full">
                                         <Accordion type="single" collapsible className="w-full">
                                             <AccordionItem value="git" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    Git and Version Control
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>Git and Version Control</AccordionTrigger>
                                                 <AccordionContent className="text-black">
                                                     Robust Git workflow : interactive rebase, commit squash, controlled force push, conflict resolution.
                                                 </AccordionContent>
                                             </AccordionItem>
                                             <AccordionItem value="apis" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    API's Architecture
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>API's Architecture</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Design and Use of REST APIs
+                                                    Design and Use of REST APIs<br />
                                                     Endpoint structuring, JSON response format handling
                                                 </AccordionContent>
                                             </AccordionItem>
                                             <AccordionItem value="unix-linux" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    UNIX and LINUX Systems
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>UNIX and LINUX Systems</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Daily use of the terminal.
+                                                    Daily use of the terminal.<br />
                                                     Using Linux commands on Ubuntu.
                                                 </AccordionContent>
                                             </AccordionItem>
                                             <AccordionItem value="ai" className="border-lilac-800">
-                                                <AccordionTrigger >
-                                                    Artificial Intelligence
-                                                </AccordionTrigger>
+                                                <AccordionTrigger>Artificial Intelligence</AccordionTrigger>
                                                 <AccordionContent className="text-black">
-                                                    Python for Data Science (pandas, NumPy, scikit-learn, matplotlib).
+                                                    Python for Data Science (pandas, NumPy, scikit-learn, matplotlib).<br />
                                                     Work on machine learning models.
                                                 </AccordionContent>
                                             </AccordionItem>
@@ -202,10 +197,10 @@ function Academic() {
                     </div>
                 </div>
 
-                {/* CARD 1 - High School */}
+                {/* CARD 2 - High School */}
                 <div
                     ref={box1Ref}
-                    className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
+                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
                 >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-lilac-900/60">
                         <div className="flex items-center gap-3">
@@ -243,15 +238,9 @@ function Academic() {
                     </div>
                 </div>
 
-                {/* CARD 2 - Engineering Degree */}
-
-
             </div>
         </div>
-
-
     );
 }
 
-export default Academic
-
+export default Academic;

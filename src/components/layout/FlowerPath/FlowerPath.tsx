@@ -1,7 +1,10 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { catmullRomToBezier } from '@/lib/utils';
 
-interface Point { x: number; y: number }
+interface Point {
+    x: number;
+    y: number;
+}
 
 interface BloomingPathProps {
     points: Point[];
@@ -10,12 +13,15 @@ interface BloomingPathProps {
     className?: string;
 }
 
-function normalize(dx: number, dy: number) {
-    const len = Math.hypot(dx, dy) || 1;
-    return { x: dx / len, y: dy / len };
-}
-
-function MiniFlower({ x, y, delay }: { x: number; y: number; delay: number }) {
+function MiniFlower({
+    x,
+    y,
+    delay,
+}: {
+    x: number;
+    y: number;
+    delay: number;
+}) {
     return (
         <g
             style={{
@@ -35,7 +41,13 @@ function MiniFlower({ x, y, delay }: { x: number; y: number; delay: number }) {
                     transform={`rotate(${angle} ${x} ${y})`}
                 />
             ))}
-            <circle cx={x} cy={y} r={3.5} fill="var(--color-lilac-600)" />
+
+            <circle
+                cx={x}
+                cy={y}
+                r={3.5}
+                fill="var(--color-lilac-600)"
+            />
         </g>
     );
 }
@@ -49,170 +61,124 @@ export default function FlowerPath({
     const svgRef = useRef<SVGSVGElement>(null);
     const glowPathRef = useRef<SVGPathElement>(null);
     const pathRef = useRef<SVGPathElement>(null);
-    const [flowers, setFlowers] = useState<{ x: number; y: number; delay: number }[]>([]);
 
-    const BEND_DISTANCE = 300;
-    const BEND_FACTOR = 2;
-    const BEND_DISTANCE1 = 350;
+    const [flowers, setFlowers] = useState<
+        { x: number; y: number; delay: number }[]
+    >([]);
 
     useLayoutEffect(() => {
-        if (!svgRef.current || !pathRef.current || !glowPathRef.current || points.length < 2) return;
+        if (
+            !svgRef.current ||
+            !pathRef.current ||
+            !glowPathRef.current ||
+            points.length < 2
+        ) {
+            return;
+        }
 
-        const rect = svgRef.current.getBoundingClientRect();
-        const EXT = Math.max(rect.width, rect.height) * 1.5;
-
-        const first = points[0];
-        const second = points[1];
-        const last = points[points.length - 1];
-        const beforeLast = points[points.length - 2];
-
-        const extStart = { x: first.x, y: first.y - EXT };
-        const extEnd = { x: last.x, y: last.y + EXT };
-
+        // Utilisation directe des points de zigzag pour générer la courbe adoucie
         const mainD = catmullRomToBezier(points);
-        const mainCommands = mainD.substring(mainD.indexOf('C'));
 
-        const dirFirst = normalize(second.x - first.x, second.y - first.y);
-        const dirLast = normalize(beforeLast.x - last.x, beforeLast.y - last.y);
-
-        const headCp1 = { x: extStart.x, y: first.y - BEND_DISTANCE };
-        const headCp2 = {
-            x: first.x - dirFirst.x * BEND_DISTANCE * BEND_FACTOR,
-            y: first.y - dirFirst.y * BEND_DISTANCE * BEND_FACTOR,
-        };
-
-        const tailCp1 = {
-            x: last.x - dirLast.x * BEND_DISTANCE1 * BEND_FACTOR,
-            y: last.y - dirLast.y * BEND_DISTANCE1 * BEND_FACTOR,
-        };
-        const tailCp2 = { x: extEnd.x, y: last.y + BEND_DISTANCE1 };
-
-        const d =
-            `M ${extStart.x} ${extStart.y} ` +
-            `C ${headCp1.x} ${headCp1.y}, ${headCp2.x} ${headCp2.y}, ${first.x} ${first.y} ` +
-            mainCommands +
-            ` C ${tailCp1.x} ${tailCp1.y}, ${tailCp2.x} ${tailCp2.y}, ${extEnd.x} ${extEnd.y}`;
-
-        glowPathRef.current.setAttribute('d', d);
-        pathRef.current.setAttribute('d', d);
+        glowPathRef.current.setAttribute('d', mainD);
+        pathRef.current.setAttribute('d', mainD);
 
         const length = pathRef.current.getTotalLength();
 
-        const SAMPLES = 300;
-        const CONSECUTIVE_REQUIRED = 5; // évite un faux positif sur un simple dépassement de courbe
-
-        const isVisible = (l: number) => {
-            const pt = pathRef.current!.getPointAtLength(l);
-            return pt.y >= -20 && pt.y <= rect.height + 20;
-        };
-
-        let visibleStartLength = 0;
-        for (let i = 0; i <= SAMPLES; i++) {
-            const l = (length * i) / SAMPLES;
-            if (!isVisible(l)) continue;
-
-            let stable = true;
-            for (let j = 1; j <= CONSECUTIVE_REQUIRED; j++) {
-                const lNext = (length * (i + j)) / SAMPLES;
-                if (lNext > length || !isVisible(lNext)) {
-                    stable = false;
-                    break;
-                }
-            }
-            if (stable) {
-                visibleStartLength = l;
-                break;
-            }
-        }
-
-        let visibleEndLength = length;
-        for (let i = SAMPLES; i >= 0; i--) {
-            const l = (length * i) / SAMPLES;
-            if (!isVisible(l)) continue;
-
-            let stable = true;
-            for (let j = 1; j <= CONSECUTIVE_REQUIRED; j++) {
-                const lPrev = (length * (i - j)) / SAMPLES;
-                if (lPrev < 0 || !isVisible(lPrev)) {
-                    stable = false;
-                    break;
-                }
-            }
-            if (stable) {
-                visibleEndLength = l;
-                break;
-            }
-        }
-
         pathRef.current.style.transition = 'none';
         glowPathRef.current.style.transition = 'none';
+
         pathRef.current.style.strokeDasharray = `${length}`;
         glowPathRef.current.style.strokeDasharray = `${length}`;
-        pathRef.current.style.strokeDashoffset = `${length - visibleStartLength}`;
-        glowPathRef.current.style.strokeDashoffset = `${length - visibleStartLength}`;
 
-        const visibleLength = visibleEndLength - visibleStartLength;
-        const visibleDuration = duration * (visibleLength / length);
+        pathRef.current.style.strokeDashoffset = `${length}`;
+        glowPathRef.current.style.strokeDashoffset = `${length}`;
 
-        const rawPositions = Array.from({ length: flowerCount }, (_, i) => {
-            const fraction = (i + 1) / (flowerCount + 2);
-            const pt = pathRef.current!.getPointAtLength(length * fraction);
-            return { x: pt.x, y: pt.y };
-        });
+        const rawPositions = Array.from(
+            { length: flowerCount },
+            (_, index) => {
+                const fraction = (index + 1) / (flowerCount + 2);
+                const point = pathRef.current!.getPointAtLength(
+                    length * fraction
+                );
 
-        const BLOOM_STAGGER = 300;
-        const BLOOM_START_OFFSET = 200;
+                return {
+                    x: point.x,
+                    y: point.y,
+                };
+            }
+        );
+
+        const BLOOM_STAGGER = 250;
+        const BLOOM_START_OFFSET = 300;
+
         setFlowers(
-            rawPositions.map((f, i) => ({
-                ...f,
-                delay: visibleDuration + BLOOM_START_OFFSET + i * BLOOM_STAGGER,
+            rawPositions.map((flower, index) => ({
+                ...flower,
+                delay:
+                    duration +
+                    BLOOM_START_OFFSET +
+                    index * BLOOM_STAGGER,
             }))
         );
 
         void pathRef.current.getBoundingClientRect();
 
-        const START_DELAY = 600; // ms avant que le tracé ne démarre
+        const START_DELAY = 300;
 
         const timeoutId = setTimeout(() => {
             requestAnimationFrame(() => {
                 if (!pathRef.current || !glowPathRef.current) return;
-                pathRef.current.style.transition = `stroke-dashoffset ${visibleDuration}ms ease-in-out`;
-                glowPathRef.current.style.transition = `stroke-dashoffset ${visibleDuration}ms ease-in-out`;
-                pathRef.current.style.strokeDashoffset = `${length - visibleEndLength}`;
-                glowPathRef.current.style.strokeDashoffset = `${length - visibleEndLength}`;
+
+                const transition = `stroke-dashoffset ${duration}ms ease-in-out`;
+
+                pathRef.current.style.transition = transition;
+                glowPathRef.current.style.transition = transition;
+
+                pathRef.current.style.strokeDashoffset = '0';
+                glowPathRef.current.style.strokeDashoffset = '0';
             });
         }, START_DELAY);
 
         return () => {
             clearTimeout(timeoutId);
         };
-
     }, [points, flowerCount, duration]);
 
     return (
         <svg
             ref={svgRef}
-            className={`absolute inset-0 w-full h-full ${className}`}
-            style={{ overflow: 'hidden' }}
+            className={`absolute inset-0 h-full w-full pointer-events-none ${className}`}
+            style={{ overflow: 'visible' }}
         >
+            {/* Halo lumineux */}
             <path
                 ref={glowPathRef}
                 fill="none"
                 stroke="var(--color-lilac-400)"
-                strokeWidth={4}
+                strokeWidth={10}
                 strokeLinecap="round"
-                style={{ filter: 'blur(4px)', opacity: 0.6, willChange: 'stroke-dashoffset' }}
+                style={{
+                    filter: 'blur(8px)',
+                    opacity: 0.85,
+                    willChange: 'stroke-dashoffset',
+                }}
             />
+
+            {/* Tracé principal */}
             <path
                 ref={pathRef}
                 fill="none"
-                stroke="var(--color-lilac-400)"
-                strokeWidth={4}
+                stroke="var(--color-lilac-300)"
+                strokeWidth={5}
                 strokeLinecap="round"
-                style={{ willChange: 'stroke-dashoffset' }}
+                style={{
+                    willChange: 'stroke-dashoffset',
+                    filter: 'drop-shadow(0 0 8px rgba(216,180,254,0.8))',
+                }}
             />
-            {flowers.map((f, i) => (
-                <MiniFlower key={i} {...f} />
+
+            {flowers.map((flower, index) => (
+                <MiniFlower key={index} {...flower} />
             ))}
         </svg>
     );
