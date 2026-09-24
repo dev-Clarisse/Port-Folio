@@ -73,7 +73,7 @@ function Academic() {
                 {/* CARD 1 - Master / Engineering */}
                 <div
                     ref={box2Ref}
-                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
+                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] animate-slide-in-left"
                 >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-lilac-900/60">
                         <div className="flex items-center gap-3">
@@ -200,8 +200,9 @@ function Academic() {
                 {/* CARD 2 - High School */}
                 <div
                     ref={box1Ref}
-                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]"
+                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] animate-slide-in-right"
                 >
+                
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-lilac-900/60">
                         <div className="flex items-center gap-3">
                             <div className="p-2 rounded-lg bg-lilac-950 border border-lilac-800/50 text-lilac-300 shrink-0">
