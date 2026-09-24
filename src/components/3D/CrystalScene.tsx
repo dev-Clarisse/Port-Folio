@@ -16,49 +16,48 @@ const PHI = 1.618033988749895;
 
 const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
   tetrahedron: [
-    { position: [1, 1, 1], label: "JavaScript / TypeScript" },
-    { position: [-1, -1, 1], label: "React / React Native" },
-    { position: [-1, 1, -1], label: "Tailwind CSS / Bootstrap" },
-    { position: [1, -1, -1], label: "REST APIs" },
+    { position: [1.4, 1.4, 1.4], label: "JavaScript / TypeScript" },
+    { position: [-1.4, -1.4, 1.4], label: "React / React Native" },
+    { position: [-1.4, 1.4, -1.4], label: "Tailwind CSS / Bootstrap" },
+    { position: [1.4, -1.4, -1.4], label: "REST APIs" },
   ],
   octahedron: [
-    { position: [1.8, 0, 0], label: "Java" },
-    { position: [-1.8, 0, 0], label: "PHP" },
-    { position: [0, 1.8, 0], label: "Spring / Spring Boot" },
-    { position: [0, -1.8, 0], label: "PostgreSQL" },
-    { position: [0, 0, 1.8], label: "Docker" },
-    { position: [0, 0, -1.8], label: "Python / Scikit-learn" },
+    { position: [2.6, 0, 0], label: "Java" },
+    { position: [-2.6, 0, 0], label: "PHP" },
+    { position: [0, 2.6, 0], label: "Spring / Spring Boot" },
+    { position: [0, -2.6, 0], label: "PostgreSQL" },
+    { position: [0, 0, 2.6], label: "Docker" },
+    { position: [0, 0, -2.6], label: "Python / Scikit-learn" },
   ],
   icosahedron: [
-    { position: [0, 1, PHI], label: "Angular" },
-    { position: [0, -1, PHI], label: "HTML5 / CSS3 / SCSS" },
-    { position: [1, PHI, 0], label: "" },
-    { position: [-1, PHI, 0], label: "" },
-    { position: [PHI, 0, 1], label: "Git / GitFlow" },
-    { position: [-PHI, 0, 1], label: "PostMan" },
-    { position: [0, 1, -PHI], label: "Expo / Expo Go" },
-    { position: [0, -1, -PHI], label: "Stripe" },
-    { position: [1, -PHI, 0], label: "" },
-    { position: [-1, -PHI, 0], label: "EmailJS" },
-    { position: [PHI, 0, -1], label: "Web Audio API" },
-    { position: [-PHI, 0, -1], label: "LaTeX" },
+    { position: [0, 1.4, PHI * 1.4], label: "Angular" },
+    { position: [0, -1.4, PHI * 1.4], label: "HTML5 / CSS3 / SCSS" },
+    { position: [1.4, PHI * 1.4, 0], label: "" },
+    { position: [-1.4, PHI * 1.4, 0], label: "" },
+    { position: [PHI * 1.4, 0, 1.4], label: "Git / GitFlow" },
+    { position: [-PHI * 1.4, 0, 1.4], label: "PostMan" },
+    { position: [0, 1.4, -PHI * 1.4], label: "Expo / Expo Go" },
+    { position: [0, -1.4, -PHI * 1.4], label: "Stripe" },
+    { position: [1.4, -PHI * 1.4, 0], label: "" },
+    { position: [-1.4, -PHI * 1.4, 0], label: "" },
+    { position: [PHI * 1.4, 0, -1.4], label: "Web Audio API" },
+    { position: [-PHI * 1.4, 0, -1.4], label: "LaTeX" },
   ],
   octahedron2: [
-    { position: [1.8, 0, 0], label: "Adaptability" },
-    { position: [-1.8, 0, 0], label: "Teamwork" },
-    { position: [0, 1.8, 0], label: "Autonomy" },
-    { position: [0, -1.8, 0], label: "Problem solving" },
-    { position: [0, 0, 1.8], label: "Fast Learner" },
-    { position: [0, 0, -1.8], label: "Cross-Cultural communication" },
+    { position: [2.6, 0, 0], label: "Adaptability" },
+    { position: [-2.6, 0, 0], label: "Teamwork" },
+    { position: [0, 2.6, 0], label: "Autonomy" },
+    { position: [0, -2.6, 0], label: "Problem solving" },
+    { position: [0, 0, 2.6], label: "Fast Learner" },
+    { position: [0, 0, -2.6], label: "Cross-Cultural communication" },
   ],
-
   octahedron3: [
-    { position: [1.8, 0, 0], label: "" },
-    { position: [-1.8, 0, 0], label: "" },
-    { position: [0, 1.8, 0], label: "English" },
-    { position: [0, -1.8, 0], label: "Spanish" },
-    { position: [0, 0, 1.8], label: "" },
-    { position: [0, 0, -1.8], label: "French" },
+    { position: [2.6, 0, 0], label: "" },
+    { position: [-2.6, 0, 0], label: "" },
+    { position: [0, 2.6, 0], label: "English" },
+    { position: [0, -2.6, 0], label: "Spanish" },
+    { position: [0, 0, 2.6], label: "" },
+    { position: [0, 0, -2.6], label: "French" },
   ],
 };
 
@@ -75,36 +74,36 @@ const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
   },
   PHP: {
     highlights: [
-      "full-stack e-commerce website",
-      "Backend logic, user authentification, shopping cart management",
+      "Full-stack e-commerce website",
+      "Backend logic, user authentication, shopping cart management",
       "Secure online payments via the Stripe API",
       "Managing the database",
     ],
   },
   "Spring / Spring Boot": {
     highlights: [
-      "Restful backend for a restaurant application",
+      "RESTful backend for a restaurant application",
       "Building REST APIs",
-      "Managing customer orders, track ingredient, inventory levels, handle automated supllier restocking requests",
-      "Built a modular portal , JWT authentification, PostgreSQL storage, Spring Boot, Angular 17",
+      "Managing customer orders, tracking inventory levels, and automated supplier restocking requests",
+      "Built a modular portal, JWT authentication, PostgreSQL storage, Spring Boot, Angular 17",
     ],
   },
   PostgreSQL: {
     highlights: [
-      "Built a modular portal , JWT authentification, PostgreSQL storage, Spring Boot, Angular 17",
-      "Designing relational schemas to store and manage dynamic content such as quote collections in Android development projects",
+      "Built a modular portal, JWT authentication, PostgreSQL storage, Spring Boot, Angular 17",
+      "Designing relational schemas to store and manage dynamic content in Android development projects",
     ],
   },
   Docker: {
     highlights: [
       "Use in various school and personal projects",
-      "Designing relational schemas to store and manage dynamic content such as quote collections in Android development projects",
+      "Containerizing applications for consistent deployment across environments",
     ],
   },
   Angular: {
     highlights: [
-      "Built a modular portal , JWT authentification, PostgreSQL storage, Spring Boot, Angular 17",
-      "dynamic movie discovery web app, interactive features such as rating movies",
+      "Built a modular portal, JWT authentication, PostgreSQL storage, Spring Boot, Angular 17",
+      "Dynamic movie discovery web app, interactive features such as rating movies",
     ],
   },
   Stripe: {
@@ -141,19 +140,19 @@ const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
     ],
   },
   "JavaScript / TypeScript": {
-    highlights: ["Engineered a portfolio using React, TypeScript and Vite", "Using in various school and personal projects"],
+    highlights: ["Engineered a portfolio using React, TypeScript and Vite", "Used in various school and personal projects"],
   },
   "REST APIs": {
     highlights: [
-      "Designing, building and consuming RESTful APIs accros multiple full-stack and backend projects",
-      "Analysing responses, debug status codes, and verify backend business logic",
+      "Designing, building and consuming RESTful APIs across multiple full-stack and backend projects",
+      "Analyzing responses, debugging status codes, and verifying backend business logic",
     ],
   },
   "React / React Native": {
     highlights: [
       "Building responsive web and mobile interfaces",
       "Developing my portfolio, focusing on component-based architecture and modern UI principles",
-      "Built a mobile application using React Native and Expo Go, leveraging cross-platform components, state management, and device testing workflows",
+      "Built a mobile application using React Native and Expo Go, leveraging cross-platform components and state management",
     ],
   },
   "Expo / Expo Go": {
@@ -163,28 +162,27 @@ const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
   },
   "Tailwind CSS / Bootstrap": {
     highlights: [
-      "Using in a full-stack e-commerce website",
+      "Used in a full-stack e-commerce website",
       "Engineered a portfolio using React, TypeScript and Vite",
       "Building a complete website for a family member",
     ],
   },
   "HTML5 / CSS3 / SCSS": {
     highlights: [
-      "building semantic, accessible, and responsive web layouts",
-      "Using in various school and personal projects",
-      "Building a complete website for a family member",
+      "Building semantic, accessible, and responsive web layouts",
+      "Used in various school and personal projects",
     ],
   },
   PostMan: {
-    highlights: ["To testing and validate endpoints, I use Postman to construct HTTP requests"],
+    highlights: ["To test and validate endpoints, constructing HTTP requests and inspecting API responses"],
   },
   Adaptability: {
-    highlights: ["adjusting to new work environments", "changing project requirements while maintaining high productivity and quality"],
+    highlights: ["Adjusting to new work environments", "Changing project requirements while maintaining high productivity and quality"],
   },
   Teamwork: {
     highlights: [
       "Open communication, peer code reviews, active participation in Agile workflows",
-      "Collaborate effectively within multi-disciplinary teams",
+      "Collaborating effectively within multi-disciplinary teams",
     ],
   },
   Autonomy: {
@@ -194,34 +192,29 @@ const SKILL_DESCRIPTIONS: Record<string, SkillDescription> = {
     ],
   },
   "Problem solving": {
-    highlights: ["Resolving merge conflicts to maintain a clean codebase", "Approaching complex technical bugs and system challenges"],
+    highlights: ["Resolving complex technical bugs and system challenges", "Debugging code and optimizing performance"],
   },
   "Fast Learner": {
-    highlights: ["Rapidly absorb new programming languages, frameworks, and tools"],
+    highlights: ["Rapidly absorbing new programming languages, frameworks, and tools"],
   },
   "Cross-Cultural communication": {
     highlights: [
       "Communicated professionally and empathetically with international clients via email, helping them troubleshoot issues",
     ],
   },
-  "English": {
+  English: {
     highlights: [
       "B2+ level",
-      "Cambridge English Skills Test : 167"
-
+      "Cambridge English Skills Test: 167",
     ],
-    pdfUrl: "/pdfs/EST_Candidate_Test_Report.pdf"
+    pdfUrl: "/pdfs/EST_Candidate_Test_Report.pdf",
   },
-  "Spanish": {
-    highlights: [
-      "A2 Level",
-    ],
+  Spanish: {
+    highlights: ["A2 Level"],
   },
-  "French": {
-    highlights: [
-      "Native",
-    ],
-    pdfUrl: "/pdfs/attestation_score_Voltaire.pdf"
+  French: {
+    highlights: ["Native speaker"],
+    pdfUrl: "/pdfs/attestation_score_Voltaire.pdf",
   },
 };
 
@@ -231,10 +224,7 @@ function ViewportUpdater() {
   const { invalidate } = useThree();
 
   useEffect(() => {
-    const handleScroll = () => {
-      invalidate();
-    };
-
+    const handleScroll = () => invalidate();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [invalidate]);
@@ -268,7 +258,8 @@ function Crystal({
   });
 
   const labels = SKILLS_BY_GEOMETRY[geometry];
-  const CRYSTAL_RADIUS = 1.5;
+  // Augmentation de la taille des cristaux
+  const CRYSTAL_RADIUS = 2.8;
 
   const handleLabelClick = (label: string, vertexPosition: [number, number, number]) => (e: ThreeEvent<MouseEvent>) => {
     if (!label) return;
@@ -292,11 +283,11 @@ function Crystal({
   return (
     <group ref={groupRef}>
       <mesh ref={meshRef}>
-        {geometry === "tetrahedron" && <tetrahedronGeometry args={[1.5, 0]} />}
-        {geometry === "octahedron" && <octahedronGeometry args={[1.5, 0]} />}
-        {geometry === "icosahedron" && <icosahedronGeometry args={[1.5, 0]} />}
-        {geometry === "octahedron2" && <octahedronGeometry args={[1.5, 0]} />}
-        {geometry === "octahedron3" && <octahedronGeometry args={[1.5, 0]} />}
+        {geometry === "tetrahedron" && <tetrahedronGeometry args={[CRYSTAL_RADIUS, 0]} />}
+        {geometry === "octahedron" && <octahedronGeometry args={[CRYSTAL_RADIUS, 0]} />}
+        {geometry === "icosahedron" && <icosahedronGeometry args={[CRYSTAL_RADIUS, 0]} />}
+        {geometry === "octahedron2" && <octahedronGeometry args={[CRYSTAL_RADIUS, 0]} />}
+        {geometry === "octahedron3" && <octahedronGeometry args={[CRYSTAL_RADIUS, 0]} />}
         <meshPhysicalMaterial
           flatShading={true}
           color="#6247aa"
@@ -312,15 +303,30 @@ function Crystal({
       {labels.map(({ position, label }) => {
         if (label === selectedLabel) return null;
 
+        const LABEL_OFFSET = 0.35;
+
+        const labelPosition = new Vector3(...position)
+          .normalize()
+          .multiplyScalar(CRYSTAL_RADIUS + LABEL_OFFSET)
+          .toArray() as [number, number, number];
+
         return (
-          <Billboard key={label || `${position.join(",")}`} position={position}>
+          <Billboard
+            key={label || `${position.join(",")}`}
+            position={labelPosition}
+          >
             <Text
-              fontSize={0.22}
+              fontSize={0.28}
+              maxWidth={3.2}
+              overflowWrap="break-word"
+              lineHeight={1.15}
               color="#dec9e9"
               anchorX="center"
               anchorY="middle"
-              outlineWidth={0.01}
+              outlineWidth={0.012}
               outlineColor="#4e148c"
+              material-depthTest={false}
+              renderOrder={10}
               onClick={handleLabelClick(label, position)}
               onPointerOver={() => {
                 if (label) document.body.style.cursor = "pointer";
@@ -334,6 +340,7 @@ function Crystal({
           </Billboard>
         );
       })}
+
     </group>
   );
 }
@@ -356,7 +363,7 @@ function SceneContent({
   return (
     <>
       <ViewportUpdater />
-      <PerspectiveCamera makeDefault position={cameraPosition} fov={50} />
+      <PerspectiveCamera makeDefault position={cameraPosition} fov={65} />
       <ambientLight intensity={1.2} />
       <directionalLight position={[10, 10, 5]} intensity={2.5} color="#ffffff" />
       <directionalLight position={[-10, -10, -5]} intensity={1.2} color="#c8a2d8" />
@@ -391,7 +398,7 @@ function SkillModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-2xl text-[var(--lavender-purple)]">{skill.label}</h3>
+          <h3 className="text-2xl text-[var(--lavender-purple)] font-bold">{skill.label}</h3>
           <Button onClick={onClose} className="text-lilac-300 text-xl leading-none" variant="ghost" size="icon-sm">
             <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
             <span className="sr-only">Close</span>
@@ -405,7 +412,7 @@ function SkillModal({
             ))}
           </ul>
         ) : (
-          <p className="text-lilac-200">Description à venir.</p>
+          <p className="text-lilac-200">Description coming soon.</p>
         )}
 
         {desc?.pdfUrl && (
@@ -416,15 +423,13 @@ function SkillModal({
             >
               <a href={desc.pdfUrl} target="_blank" rel="noopener noreferrer">
                 <FileText size={18} aria-hidden="true" />
-                View the certification
+                View certification
               </a>
             </Button>
           </div>
         )}
-
-
       </div>
-    </div >
+    </div>
   );
 }
 
@@ -506,16 +511,15 @@ const FocusBlurOverlay = memo(({ rect }: { rect: DOMRect | null }) => {
 FocusBlurOverlay.displayName = "FocusBlurOverlay";
 
 const TECHNICAL_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
-  { geometry: "tetrahedron", cameraPosition: [8, 0, 0] },
-  { geometry: "octahedron", cameraPosition: [0, 8, 0] },
-  { geometry: "icosahedron", cameraPosition: [0, 0, 8] },
+  { geometry: "tetrahedron", cameraPosition: [10.5, 0, 0] },
+  { geometry: "octahedron", cameraPosition: [0, 10.5, 0] },
+  { geometry: "icosahedron", cameraPosition: [0, 0, 10.5] },
 ];
 
 const SOFT_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
-  { geometry: "octahedron2", cameraPosition: [0, 8, 0] },
-  { geometry: "octahedron3", cameraPosition: [0, 8, 0] },
+  { geometry: "octahedron2", cameraPosition: [0, 10.5, 0] },
+  { geometry: "octahedron3", cameraPosition: [0, 10.5, 0] },
 ];
-
 
 export default function CrystalScene() {
   const tetraViewRef = useRef<HTMLDivElement>(null);
@@ -524,6 +528,7 @@ export default function CrystalScene() {
   const octa2ViewRef = useRef<HTMLDivElement>(null);
   const octa3ViewRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
   const [selected, setSelected] = useState<SelectedSkill | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [modalStyle, setModalStyle] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
@@ -606,7 +611,6 @@ export default function CrystalScene() {
     }
   }, [selected]);
 
-
   useLayoutEffect(() => {
     if (!selected || !modalRef.current) return;
     const MARGIN = 16;
@@ -628,63 +632,81 @@ export default function CrystalScene() {
   const isCrystalFrozen = (geometry: GeometryType) => selected?.geometry === geometry || !isInViewport;
 
   return (
-    <div ref={containerRef} className="relative w-full ">
-      <div className="flex flex-col items-center pt-8 pb-2">
-        <div className="gap-4 mb-1">
-          <h2 className="text-3xl text-lilac-1000 text-center">Technical Skills</h2>
-          <p className="text-lilac-1100 text-center max-w-md">Frontend, Backend, Mobile, Data/ML, Tools&DevOps, Integrations</p>
+    <div ref={containerRef} className="relative w-full py-8 space-y-12">
+      {/* Section Technical Skills */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-8">
+        <div className="flex flex-col items-center mb-6 text-center">
+          <h2 className="text-3xl font-bold text-lilac-100 mb-2">Technical Skills</h2>
+          <p className="text-lilac-200/80 max-w-md text-sm sm:text-base">
+            Frontend, Backend, Mobile, Data/ML, Tools & DevOps, Integrations
+          </p>
         </div>
-      </div>
 
-      <div className="h-137.5 flex">
-        {TECHNICAL_CRYSTALS.map(({ geometry, cameraPosition }) => (
-          <View
-            key={geometry}
-            ref={viewRefsByGeometry[geometry]}
-            className="relative w-1/3 h-full overflow-hidden [clip-path:inset(0)]"
-          >
-            {hasMounted && (
-              <SceneContent
-                cameraPosition={cameraPosition}
-                geometry={geometry}
-                isFrozen={isCrystalFrozen(geometry)}
-                onSkillClick={handleSkillClick(geometry)}
-                viewRef={viewRefsByGeometry[geometry]}
-                selectedLabel={selected?.geometry === geometry ? selected.label : undefined}
-              />
-            )}
-          </View>
-        ))}
-      </div>
-
-      <div className="flex flex-col items-center pt-4 pb-2">
-        <div className="gap-4 mb-1">
-          <h2 className="text-3xl text-lilac-1000 text-center">Soft Skills</h2>
-          <p className="text-lilac-1100 text-center max-w-md">Character traits and communication abilities</p>
+        <div className="flex justify-center mb-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lilac-950/60 border border-lilac-500/30 text-xs text-lilac-200">
+            <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+            Click on a skill to view the details
+          </span>
         </div>
-      </div>
 
-      <div className=" justify-center h-[550px] flex">
-        {SOFT_CRYSTALS.map(({ geometry, cameraPosition }) => (
-          <View
-            key={geometry}
-            ref={viewRefsByGeometry[geometry]}
-            className="relative w-1/3 h-full overflow-hidden [clip-path:inset(0)]"
-          >
-            {hasMounted && (
-              <SceneContent
-                cameraPosition={cameraPosition}
-                geometry={geometry}
-                isFrozen={isCrystalFrozen(geometry)}
-                onSkillClick={handleSkillClick(geometry)}
-                viewRef={viewRefsByGeometry[geometry]}
-                selectedLabel={selected?.geometry === geometry ? selected.label : undefined}
-              />
-            )}
-          </View>
-        ))}
-      </div>
+        <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-8 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
+          <div className="min-h-[1100px] sm:min-h-[420px] lg:min-h-[520px] w-full grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-24 lg:gap-32 items-center justify-center">
+            {TECHNICAL_CRYSTALS.map(({ geometry, cameraPosition }) => (
+              <View
+                key={geometry}
+                ref={viewRefsByGeometry[geometry]}
+                className="relative w-full h-[350px] sm:h-full overflow-visible"
+              >
+                {hasMounted && (
+                  <SceneContent
+                    cameraPosition={cameraPosition}
+                    geometry={geometry}
+                    isFrozen={isCrystalFrozen(geometry)}
+                    onSkillClick={handleSkillClick(geometry)}
+                    viewRef={viewRefsByGeometry[geometry]}
+                    selectedLabel={selected?.geometry === geometry ? selected.label : undefined}
+                  />
+                )}
+              </View>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* Section Soft Skills */}
+      <section className="w-full max-w-3xl mx-auto px-4">
+        <div className="flex flex-col items-center mb-6 text-center">
+          <h2 className="text-3xl font-bold text-lilac-100 mb-2">Soft Skills</h2>
+          <p className="text-lilac-200/80 max-w-md text-sm sm:text-base">
+            Character traits, languages, and communication abilities
+          </p>
+        </div>
+
+        <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
+          <div className="min-h-[750px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 items-center justify-center mx-auto">
+            {SOFT_CRYSTALS.map(({ geometry, cameraPosition }) => (
+              <View
+                key={geometry}
+                ref={viewRefsByGeometry[geometry]}
+                className="relative w-full h-[350px] sm:h-full"
+              >
+                {hasMounted && (
+                  <SceneContent
+                    cameraPosition={cameraPosition}
+                    geometry={geometry}
+                    isFrozen={isCrystalFrozen(geometry)}
+                    onSkillClick={handleSkillClick(geometry)}
+                    viewRef={viewRefsByGeometry[geometry]}
+                    selectedLabel={selected?.geometry === geometry ? selected.label : undefined}
+                  />
+                )}
+              </View>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Rendu global Three.js Canvas */}
       {hasMounted && (
         <Canvas
           dpr={[1, 1.5]}
@@ -700,6 +722,7 @@ export default function CrystalScene() {
         </Canvas>
       )}
 
+      {/* Overlay et Modale */}
       <FocusBlurOverlay rect={activeRect} />
 
       {selected && (
