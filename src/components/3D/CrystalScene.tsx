@@ -316,8 +316,8 @@ function Crystal({
             position={labelPosition}
           >
             <Text
-              fontSize={0.28}
-              maxWidth={3.2}
+              fontSize={0.40}
+              maxWidth={3.8}
               overflowWrap="break-word"
               lineHeight={1.15}
               color="#dec9e9"
@@ -511,14 +511,14 @@ const FocusBlurOverlay = memo(({ rect }: { rect: DOMRect | null }) => {
 FocusBlurOverlay.displayName = "FocusBlurOverlay";
 
 const TECHNICAL_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
-  { geometry: "tetrahedron", cameraPosition: [10.5, 0, 0] },
-  { geometry: "octahedron", cameraPosition: [0, 10.5, 0] },
-  { geometry: "icosahedron", cameraPosition: [0, 0, 10.5] },
+  { geometry: "tetrahedron", cameraPosition: [12, 0, 0] },
+  { geometry: "octahedron", cameraPosition: [0, 12, 0] },
+  { geometry: "icosahedron", cameraPosition: [0, 0, 12] },
 ];
 
 const SOFT_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
-  { geometry: "octahedron2", cameraPosition: [0, 10.5, 0] },
-  { geometry: "octahedron3", cameraPosition: [0, 10.5, 0] },
+  { geometry: "octahedron2", cameraPosition: [0, 11, 0] },
+  { geometry: "octahedron3", cameraPosition: [0, 11, 0] },
 ];
 
 export default function CrystalScene() {
@@ -634,9 +634,9 @@ export default function CrystalScene() {
   return (
     <div ref={containerRef} className="relative w-full py-8 space-y-12">
       {/* Section Technical Skills */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-8">
+      <section className="w-full max-w-[96rem] mx-auto px-4 sm:px-8">
         <div className="flex flex-col items-center mb-6 text-center">
-          <h2 className="text-3xl font-bold text-lilac-100 mb-2">Technical Skills</h2>
+          <h2 className="text-3xl font-bold text-lilac-1000 mb-2">Technical Skills</h2>
           <p className="text-lilac-200/80 max-w-md text-sm sm:text-base">
             Frontend, Backend, Mobile, Data/ML, Tools & DevOps, Integrations
           </p>
@@ -650,7 +650,7 @@ export default function CrystalScene() {
         </div>
 
         <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-8 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
-          <div className="min-h-[1100px] sm:min-h-[420px] lg:min-h-[520px] w-full grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-24 lg:gap-32 items-center justify-center">
+          <div className="min-h-[1100px] sm:min-h-[420px] lg:min-h-[520px] w-full grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-32 lg:gap-40 items-center justify-center">
             {TECHNICAL_CRYSTALS.map(({ geometry, cameraPosition }) => (
               <View
                 key={geometry}
@@ -674,16 +674,16 @@ export default function CrystalScene() {
       </section>
 
       {/* Section Soft Skills */}
-      <section className="w-full max-w-3xl mx-auto px-4">
+      <section className="w-full max-w-4xl mx-auto px-4">
         <div className="flex flex-col items-center mb-6 text-center">
-          <h2 className="text-3xl font-bold text-lilac-100 mb-2">Soft Skills</h2>
+          <h2 className="text-3xl font-bold text-lilac-1000 mb-2">Soft Skills</h2>
           <p className="text-lilac-200/80 max-w-md text-sm sm:text-base">
             Character traits, languages, and communication abilities
           </p>
         </div>
 
         <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
-          <div className="min-h-[750px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 items-center justify-center mx-auto">
+           <div className="min-h-[750px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16 lg:gap-20 items-center justify-center mx-auto">
             {SOFT_CRYSTALS.map(({ geometry, cameraPosition }) => (
               <View
                 key={geometry}
