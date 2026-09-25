@@ -7,7 +7,7 @@ function Experiences() {
         <section className="mx-auto w-full max-w-6xl px-6 pb-24 pt-12 text-white sm:px-10">
             <header className="mx-auto mb-16 max-w-2xl text-center">
 
-                <h1 className="neon-2 text-6xl font-citation text-lilac-950 sm:text-6xl">
+                <h1 className="text-4xl font-bold text-lilac-1000 mb-2">
                     Experiences
                 </h1>
                 <p className="mt-5 text-base leading-7 text-lilac-200">

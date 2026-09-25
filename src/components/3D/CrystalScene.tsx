@@ -16,48 +16,48 @@ const PHI = 1.618033988749895;
 
 const SKILLS_BY_GEOMETRY: Record<GeometryType, VertexLabel[]> = {
   tetrahedron: [
-    { position: [1.4, 1.4, 1.4], label: "JavaScript / TypeScript" },
-    { position: [-1.4, -1.4, 1.4], label: "React / React Native" },
-    { position: [-1.4, 1.4, -1.4], label: "Tailwind CSS / Bootstrap" },
-    { position: [1.4, -1.4, -1.4], label: "REST APIs" },
+    { position: [1.8, 1.8, 1.8], label: "JavaScript / TypeScript" },
+    { position: [-1.8, -1.8, 1.8], label: "React / React Native" },
+    { position: [-1.8, 1.8, -1.8], label: "Tailwind CSS / Bootstrap" },
+    { position: [1.8, -1.8, -1.8], label: "REST APIs" },
   ],
   octahedron: [
-    { position: [2.6, 0, 0], label: "Java" },
-    { position: [-2.6, 0, 0], label: "PHP" },
-    { position: [0, 2.6, 0], label: "Spring / Spring Boot" },
-    { position: [0, -2.6, 0], label: "PostgreSQL" },
-    { position: [0, 0, 2.6], label: "Docker" },
-    { position: [0, 0, -2.6], label: "Python / Scikit-learn" },
+    { position: [2.8, 0, 0], label: "Java" },
+    { position: [-2.8, 0, 0], label: "PHP" },
+    { position: [0, 2.8, 0], label: "Spring / Spring Boot" },
+    { position: [0, -2.8, 0], label: "PostgreSQL" },
+    { position: [0, 0, 2.8], label: "Docker" },
+    { position: [0, 0, -2.8], label: "Python / Scikit-learn" },
   ],
   icosahedron: [
-    { position: [0, 1.4, PHI * 1.4], label: "Angular" },
-    { position: [0, -1.4, PHI * 1.4], label: "HTML5 / CSS3 / SCSS" },
-    { position: [1.4, PHI * 1.4, 0], label: "" },
-    { position: [-1.4, PHI * 1.4, 0], label: "" },
-    { position: [PHI * 1.4, 0, 1.4], label: "Git / GitFlow" },
-    { position: [-PHI * 1.4, 0, 1.4], label: "PostMan" },
-    { position: [0, 1.4, -PHI * 1.4], label: "Expo / Expo Go" },
-    { position: [0, -1.4, -PHI * 1.4], label: "Stripe" },
-    { position: [1.4, -PHI * 1.4, 0], label: "" },
-    { position: [-1.4, -PHI * 1.4, 0], label: "" },
-    { position: [PHI * 1.4, 0, -1.4], label: "Web Audio API" },
-    { position: [-PHI * 1.4, 0, -1.4], label: "LaTeX" },
+    { position: [0, 1.8, PHI * 1.8], label: "Angular" },
+    { position: [0, -1.8, PHI * 1.8], label: "HTML5 / CSS3 / SCSS" },
+    { position: [1.8, PHI * 1.8, 0], label: "" },
+    { position: [-1.8, PHI * 1.8, 0], label: "" },
+    { position: [PHI * 1.8, 0, 1.8], label: "Git / GitFlow" },
+    { position: [-PHI * 1.8, 0, 1.8], label: "PostMan" },
+    { position: [0, 1.8, -PHI * 1.8], label: "Expo / Expo Go" },
+    { position: [0, -1.8, -PHI * 1.8], label: "Stripe" },
+    { position: [1.8, -PHI * 1.8, 0], label: "" },
+    { position: [-1.8, -PHI * 1.8, 0], label: "" },
+    { position: [PHI * 1.8, 0, -1.8], label: "Web Audio API" },
+    { position: [-PHI * 1.8, 0, -1.8], label: "LaTeX" },
   ],
   octahedron2: [
-    { position: [2.6, 0, 0], label: "Adaptability" },
-    { position: [-2.6, 0, 0], label: "Teamwork" },
-    { position: [0, 2.6, 0], label: "Autonomy" },
-    { position: [0, -2.6, 0], label: "Problem solving" },
-    { position: [0, 0, 2.6], label: "Fast Learner" },
-    { position: [0, 0, -2.6], label: "Cross-Cultural communication" },
+    { position: [2.8, 0, 0], label: "Adaptability" },
+    { position: [-2.8, 0, 0], label: "Teamwork" },
+    { position: [0, 2.8, 0], label: "Autonomy" },
+    { position: [0, -2.8, 0], label: "Problem solving" },
+    { position: [0, 0, 2.8], label: "Fast Learner" },
+    { position: [0, 0, -2.8], label: "Cross-Cultural communication" },
   ],
   octahedron3: [
-    { position: [2.6, 0, 0], label: "" },
-    { position: [-2.6, 0, 0], label: "" },
-    { position: [0, 2.6, 0], label: "English" },
-    { position: [0, -2.6, 0], label: "Spanish" },
-    { position: [0, 0, 2.6], label: "" },
-    { position: [0, 0, -2.6], label: "French" },
+    { position: [2.8, 0, 0], label: "" },
+    { position: [-2.8, 0, 0], label: "" },
+    { position: [0, 2.8, 0], label: "English" },
+    { position: [0, -2.8, 0], label: "Spanish" },
+    { position: [0, 0, 2.8], label: "" },
+    { position: [0, 0, -2.8], label: "French" },
   ],
 };
 
@@ -258,7 +258,7 @@ function Crystal({
   });
 
   const labels = SKILLS_BY_GEOMETRY[geometry];
-  // Augmentation de la taille des cristaux
+  
   const CRYSTAL_RADIUS = 2.8;
 
   const handleLabelClick = (label: string, vertexPosition: [number, number, number]) => (e: ThreeEvent<MouseEvent>) => {
@@ -316,8 +316,8 @@ function Crystal({
             position={labelPosition}
           >
             <Text
-              fontSize={0.28}
-              maxWidth={3.2}
+              fontSize={0.40}
+              maxWidth={3.8}
               overflowWrap="break-word"
               lineHeight={1.15}
               color="#dec9e9"
@@ -511,14 +511,17 @@ const FocusBlurOverlay = memo(({ rect }: { rect: DOMRect | null }) => {
 FocusBlurOverlay.displayName = "FocusBlurOverlay";
 
 const TECHNICAL_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
-  { geometry: "tetrahedron", cameraPosition: [10.5, 0, 0] },
-  { geometry: "octahedron", cameraPosition: [0, 10.5, 0] },
-  { geometry: "icosahedron", cameraPosition: [0, 0, 10.5] },
+  { geometry: "tetrahedron", cameraPosition: [11, 0, 0] },
+  { geometry: "octahedron", cameraPosition: [0, 11, 0] },
+];
+
+const TECHNICAL_CRYSTALS_2: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
+  { geometry: "icosahedron", cameraPosition: [0, 0, 11] },
 ];
 
 const SOFT_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, number] }[] = [
-  { geometry: "octahedron2", cameraPosition: [0, 10.5, 0] },
-  { geometry: "octahedron3", cameraPosition: [0, 10.5, 0] },
+  { geometry: "octahedron2", cameraPosition: [0, 11, 0] },
+  { geometry: "octahedron3", cameraPosition: [0, 11, 0] },
 ];
 
 export default function CrystalScene() {
@@ -633,11 +636,10 @@ export default function CrystalScene() {
 
   return (
     <div ref={containerRef} className="relative w-full py-8 space-y-12">
-      {/* Section Technical Skills */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-8">
+      <section className="w-full max-w-[96rem] mx-auto px-4 sm:px-8">
         <div className="flex flex-col items-center mb-6 text-center">
-          <h2 className="text-3xl font-bold text-lilac-100 mb-2">Technical Skills</h2>
-          <p className="text-lilac-200/80 max-w-md text-sm sm:text-base">
+          <h2 className="text-3xl font-bold text-lilac-1000 mb-2">Technical Skills</h2>
+          <p className="text-lilac-200 max-w-md text-sm sm:text-base">
             Frontend, Backend, Mobile, Data/ML, Tools & DevOps, Integrations
           </p>
         </div>
@@ -649,8 +651,10 @@ export default function CrystalScene() {
           </span>
         </div>
 
-        <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-8 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
-          <div className="min-h-[1100px] sm:min-h-[420px] lg:min-h-[520px] w-full grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-24 lg:gap-32 items-center justify-center">
+        <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] max-w-4xl mx-auto">
+
+
+          <div className="min-h-[650px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-16 lg:gap-20 items-center justify-center">
             {TECHNICAL_CRYSTALS.map(({ geometry, cameraPosition }) => (
               <View
                 key={geometry}
@@ -670,20 +674,40 @@ export default function CrystalScene() {
               </View>
             ))}
           </div>
+
+          <div className="min-h-[420px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 place-items-center mt-2">
+            {TECHNICAL_CRYSTALS_2.map(({ geometry, cameraPosition }) => (
+              <View
+                key={geometry}
+                ref={viewRefsByGeometry[geometry]}
+                className="relative w-full max-w-md h-[350px] sm:h-full overflow-visible"
+              >
+                {hasMounted && (
+                  <SceneContent
+                    cameraPosition={cameraPosition}
+                    geometry={geometry}
+                    isFrozen={isCrystalFrozen(geometry)}
+                    onSkillClick={handleSkillClick(geometry)}
+                    viewRef={viewRefsByGeometry[geometry]}
+                    selectedLabel={selected?.geometry === geometry ? selected.label : undefined}
+                  />
+                )}
+              </View>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Section Soft Skills */}
-      <section className="w-full max-w-3xl mx-auto px-4">
+      <section className="w-full max-w-4xl mx-auto px-4">
         <div className="flex flex-col items-center mb-6 text-center">
-          <h2 className="text-3xl font-bold text-lilac-100 mb-2">Soft Skills</h2>
-          <p className="text-lilac-200/80 max-w-md text-sm sm:text-base">
+          <h2 className="text-3xl font-bold text-lilac-1000 mb-2">Soft Skills</h2>
+          <p className="text-lilac-200 max-w-md text-sm sm:text-base">
             Character traits, languages, and communication abilities
           </p>
         </div>
 
         <div className="bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 sm:p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
-          <div className="min-h-[750px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 items-center justify-center mx-auto">
+          <div className="min-h-[750px] sm:min-h-[420px] lg:min-h-[480px] w-full grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16 lg:gap-20 items-center justify-center mx-auto">
             {SOFT_CRYSTALS.map(({ geometry, cameraPosition }) => (
               <View
                 key={geometry}
@@ -706,7 +730,6 @@ export default function CrystalScene() {
         </div>
       </section>
 
-      {/* Rendu global Three.js Canvas */}
       {hasMounted && (
         <Canvas
           dpr={[1, 1.5]}
