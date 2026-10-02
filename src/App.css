@@ -211,16 +211,6 @@
   z-index: 1;
 }
 
-.flowers {
-  width: 100%;
-  max-width: 500px;
-  position: absolute;
-  left: 10px;
-  top: 125px;
-  animation: float 6s ease-in-out infinite;
-  filter: drop-shadow(0 0 30px var(--color-lilac-500));
-}
-
 .me {
   width: 100%;
   max-width: 200px;
