@@ -20,11 +20,13 @@ function Home() {
     ];
 
     return (
-        <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden px-4 py-12">
+        <div className="relative isolate min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 py-12">
 
-           
-            <div className="absolute left-[4%] top-1/2 z-0 flex h-[min(65vh,450px)] w-[min(44vw,480px)] -translate-y-1/2 items-center justify-center">
-                <FlowersGL />
+
+            <div className="absolute left-[4%] top-1/2 z-0 h-[min(65vh,450px)] w-[min(44vw,480px)] -translate-y-1/2">
+                <div className="relative h-full w-full">
+                    <FlowersGL />
+                </div>
             </div>
 
             <h1 className="neon citation relative z-10 font-citation text-lilac-950 text-center my-6 -mt-11 text-2xl md:text-3xl max-w-2xl">
