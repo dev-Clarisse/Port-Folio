@@ -1,24 +1,34 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import flowersImg from "@/assets/Flowers.webp";
+
 
 function FlowersPlane() {
   const ref = useRef<THREE.Mesh>(null!);
   const texture = useTexture(flowersImg);
+  const mouse = useRef({ x: 0, y: 0 });
 
-  // Petite flottaison fluide + réaction douce au curseur
-  useFrame(({ clock, pointer }) => {
-    const t = clock.getElapsedTime();
-    ref.current.position.y = Math.sin(t * 1.5) * 0.08;
-    ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, pointer.x * 0.25, 0.05);
-    ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, -pointer.y * 0.25, 0.05);
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  useFrame(({ clock }) => {
+    const { x, y } = mouse.current;
+    ref.current.position.y = Math.sin(clock.getElapsedTime()) * 0.03;
+    ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, x * 0.2, 0.05);
+    ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, y * 0.2, 0.05);
   });
 
   return (
     <mesh ref={ref}>
-      <planeGeometry args={[2.2, 2.2]} />
+      <planeGeometry args={[2, 2]} />
       <meshBasicMaterial map={texture} transparent toneMapped={false} />
     </mesh>
   );
