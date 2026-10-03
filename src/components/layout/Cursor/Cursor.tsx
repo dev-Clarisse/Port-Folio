@@ -3,20 +3,29 @@ import { useEffect, useRef, useState } from "react";
 export default function Cursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isPointer, setIsPointer] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  // Pointeur précis (souris/trackpad) uniquement : pas de curseur sur tactile
+  const [enabled] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
+  );
 
   useEffect(() => {
+    if (!enabled) return;
+
     let mouseX = 0, mouseY = 0;
     let posX = 0, posY = 0;
+    let raf = 0;
 
     const move = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      setVisible(true);
 
       const target = e.target as HTMLElement;
       setIsPointer(!!target.closest("a, button, [role='button'], input, textarea"));
     };
 
-    // Léger lissage du mouvement pour un rendu plus doux
     const animate = () => {
       posX += (mouseX - posX) * 0.25;
       posY += (mouseY - posY) * 0.25;
@@ -24,24 +33,25 @@ export default function Cursor() {
         cursorRef.current.style.left = `${posX}px`;
         cursorRef.current.style.top = `${posY}px`;
       }
-      requestAnimationFrame(animate);
+      raf = requestAnimationFrame(animate);
     };
 
     window.addEventListener("mousemove", move);
-    const raf = requestAnimationFrame(animate);
+    raf = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", move);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [enabled]);
 
+  if (!enabled) return null;
   return (
     <div
       ref={cursorRef}
-      className={`fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-200 ease-out ${
+      className={`fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-[transform,opacity] duration-200 ease-out ${
         isPointer ? "scale-125" : "scale-100"
-      }`}
+      } {visible ? "opacity-100" : "opacity-0"}`}
     >
       <svg
         width="28"

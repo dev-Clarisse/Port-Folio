@@ -6,6 +6,8 @@ import Background from './components/layout/Background/Background'
 import Cursor from "./components/layout/Cursor/Cursor"
 import { lazy, Suspense, useEffect, useRef } from "react";
 import BackButton from "./components/layout/BackButton/BackButton"
+import MobileMenu from "./components/layout/MobileMenu/MobileMenu";
+
 
 const Home = lazy(() => import("./components/sections/Home/Home"));
 const AboutMe = lazy(() => import("./components/sections/AboutMe/AboutMe"));
@@ -41,10 +43,11 @@ function App() {
 
   return (
 
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-dvh flex flex-col">
       <audio ref={audioRef} src="/sounds/chill.mp3" loop preload="none" />
-      <main className="flex-1 flex flex-col pb-16.25 sm:pb-16.25">
+      <main className="flex-1 flex flex-col pb-0 md:pb-16.25">
         <Cursor />
+        <MobileMenu />
         <Background>
           <BackButton />
           <Suspense fallback={null}>

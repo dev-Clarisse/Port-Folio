@@ -11,4 +11,11 @@ export default defineConfig({
       "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
+  server: {
+    allowedHosts: [
+      'hexagram-tarmac-tray.ngrok-free.dev',
+      // or use 'all' to allow any host while using ngrok:
+      // 'all'
+    ],
+  },
 })

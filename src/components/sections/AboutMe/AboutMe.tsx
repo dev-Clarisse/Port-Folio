@@ -2,14 +2,27 @@ import '@/App.css';
 import imageMe from '@/assets/me.jpeg';
 import FlowerBoxMe from '@/components/Box/FlowerBoxMe';
 import { Heart } from "lucide-react";
+import { useEffect } from "react";
 
 function AboutMe() {
+
+    useEffect(() => {
+        const originalBody = document.body.style.overflow;
+        const originalHtml = document.documentElement.style.overflow;
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = originalBody;
+            document.documentElement.style.overflow = originalHtml;
+        };
+    }, []);
+
+
     return (
-        <div className="w-full h-full flex items-center justify-center p-4 sm:p-8 translate-y-30">
-            <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
-                
-                {/* Photo avec conteneur fixe responsive */}
-                <div className="relative w-64 h-64 sm:w-80 sm:h-80 shrink-0 -translate-x-20 animate-slide-in-left">
+        <div className="w-full h-dvh md:h-full overflow-hidden flex items-center justify-center px-4 py-16 sm:px-8 md:p-8 md:translate-y-30">
+            <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
+
+                <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 shrink-0 md:-translate-x-20 animate-slide-in-left">
                     <FlowerBoxMe className="absolute inset-0 w-full h-full object-cover" image={imageMe} />
                 </div>
 

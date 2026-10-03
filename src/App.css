@@ -190,6 +190,12 @@
   min-height: 100vh;
 }
 
+@media (max-width: 767px) {
+  html, body {
+    background: #000;
+  }
+}
+
 
 .background {
   position: relative;
@@ -211,33 +217,9 @@
   z-index: 1;
 }
 
-.me {
-  width: 100%;
-  max-width: 200px;
-  position: absolute;
-  left: 100px;
-  top: 70px;
-}
 
 .citation {
-  position: absolute;
-  font-size: 45px;
-  top: 260px;
-  right: 180px;
-}
-
-.hello {
-  position: absolute;
-  font-size: 35px;
-  top: 450px;
-  left: 430px;
-}
-
-.name {
-  position: absolute;
-  font-size: 35px;
-  top: 500px;
-  left: 300px;
+  font-family: var(--font-citation); 
 }
 
 .neon {
@@ -436,5 +418,12 @@
   100% {
     opacity: 1;
     transform: scale(1) rotate(0deg);
+  }
+}
+
+
+@media (pointer: fine) {
+  * {
+    cursor: none;
   }
 }

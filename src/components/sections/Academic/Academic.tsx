@@ -53,27 +53,26 @@ function Academic() {
     }, []);
 
     useEffect(() => {
-        const previousOverflow = document.body.style.overflow;
-
-        document.body.style.overflow = 'hidden';
-
+        const originalBody = document.body.style.overflow;
+        const originalHtml = document.documentElement.style.overflow;
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
         return () => {
-            document.body.style.overflow = previousOverflow;
+            document.body.style.overflow = originalBody;
+            document.documentElement.style.overflow = originalHtml;
         };
     }, []);
 
     return (
-        <div ref={containerRef} className="relative max-w-4xl mx-auto px-4 py-12 min-h-screen flex flex-col justify-center items-center">
-            {/* Arrière-plan SVG avec le zigzag */}
+        <div ref={containerRef} className="relative max-w-4xl mx-auto px-4 py-16 md:py-12 min-h-dvh md:min-h-screen overflow-hidden md:overflow-visible flex flex-col justify-center items-center">
             {points.length > 0 && <FlowerPath points={points} className="pointer-events-none" />}
 
-            {/* Gap augmenté ici : gap-20 */}
-            <div className="flex flex-col items-center gap-10 relative z-10 w-full -translate-y-10">
+            <div className="flex flex-col items-center gap-5 md:gap-10 relative z-10 w-full md:-translate-y-10">
 
                 {/* CARD 1 - Master / Engineering */}
                 <div
                     ref={box2Ref}
-                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] animate-slide-in-left"
+                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 md:p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] animate-slide-in-left"
                 >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-lilac-900/60">
                         <div className="flex items-center gap-3">
@@ -81,7 +80,7 @@ function Academic() {
                                 <School size={20} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-lilac-100">
+                                <h3 className="text-lg md:text-xl font-bold text-lilac-100">
                                     Master of Science in General Engineering
                                 </h3>
                                 <p className="text-sm font-medium text-lilac-400">
@@ -200,16 +199,16 @@ function Academic() {
                 {/* CARD 2 - High School */}
                 <div
                     ref={box1Ref}
-                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] animate-slide-in-right"
+                    className="w-full bg-[#180e29]/90 backdrop-blur-md border border-lilac-800/40 rounded-xl p-4 md:p-6 shadow-lg transition-all duration-300 hover:border-lilac-500/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.15)] animate-slide-in-right"
                 >
-                
+
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-lilac-900/60">
                         <div className="flex items-center gap-3">
                             <div className="p-2 rounded-lg bg-lilac-950 border border-lilac-800/50 text-lilac-300 shrink-0">
                                 <GraduationCap size={20} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-lilac-100">
+                                <h3 className="text-lg md:text-xl font-bold text-lilac-100">
                                     Lycée Louis Thuillier
                                 </h3>
                                 <p className="text-sm font-medium text-lilac-400">
