@@ -26,6 +26,9 @@ export default function Cursor() {
       setIsPointer(!!target.closest("a, button, [role='button'], input, textarea"));
     };
 
+    const leave = () => setVisible(false);
+    const enter = () => setVisible(true);
+
     const animate = () => {
       posX += (mouseX - posX) * 0.25;
       posY += (mouseY - posY) * 0.25;
@@ -37,10 +40,14 @@ export default function Cursor() {
     };
 
     window.addEventListener("mousemove", move);
+    document.addEventListener("mouseleave", leave);
+    document.addEventListener("mouseenter", enter);
     raf = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseleave", leave);
+      document.removeEventListener("mouseenter", enter);
       cancelAnimationFrame(raf);
     };
   }, [enabled]);
@@ -49,9 +56,8 @@ export default function Cursor() {
   return (
     <div
       ref={cursorRef}
-      className={`fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-[transform,opacity] duration-200 ease-out ${
-        isPointer ? "scale-125" : "scale-100"
-      } {visible ? "opacity-100" : "opacity-0"}`}
+      className={`fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-[transform,opacity] duration-200 ease-out ${isPointer ? "scale-125" : "scale-100"
+        } ${visible ? "opacity-100" : "opacity-0"}`}
     >
       <svg
         width="28"

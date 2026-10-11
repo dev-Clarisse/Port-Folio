@@ -1,5 +1,5 @@
 import '@/App.css';
-import imageMe from '@/assets/me.jpeg';
+import imageMe from '@/assets/me2.jpeg';
 import FlowerBoxMe from '@/components/Box/FlowerBoxMe';
 import { Heart } from "lucide-react";
 import { useEffect } from "react";

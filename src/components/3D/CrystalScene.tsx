@@ -5,9 +5,10 @@ import type { Mesh, Group } from "three";
 import { Button } from "@/components/ui/button";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
-import { Vector3 } from "three";
+import { TOUCH, Vector3 } from "three";
 import { Sound } from "@/Hooks/Sound";
 import { FileText } from "lucide-react";
+import { createPortal } from "react-dom";
 
 type GeometryType = "tetrahedron" | "octahedron" | "icosahedron" | "octahedron2" | "octahedron3";
 type VertexLabel = { position: [number, number, number]; label: string };
@@ -258,7 +259,7 @@ function Crystal({
   });
 
   const labels = SKILLS_BY_GEOMETRY[geometry];
-  
+
   const CRYSTAL_RADIUS = 2.8;
 
   const handleLabelClick = (label: string, vertexPosition: [number, number, number]) => (e: ThreeEvent<MouseEvent>) => {
@@ -369,8 +370,18 @@ function SceneContent({
       <directionalLight position={[-10, -10, -5]} intensity={1.2} color="#c8a2d8" />
       <pointLight position={[5, 5, 5]} intensity={2} color="#c8a2d8" />
       <pointLight position={[-5, -5, -5]} intensity={1} color="#e6ccff" />
-      <Crystal geometry={geometry} isFrozen={isFrozen} onSkillClick={onSkillClick} viewRef={viewRef} selectedLabel={selectedLabel} />
-      <OrbitControls enablePan={false} enableZoom={false} />
+      <Crystal
+        geometry={geometry}
+        isFrozen={isFrozen}
+        onSkillClick={onSkillClick}
+        viewRef={viewRef}
+        selectedLabel={selectedLabel}
+      />
+      <OrbitControls
+        enablePan={false}
+        enableZoom={false}
+        touches={{ ONE: TOUCH.PAN, TWO: TOUCH.DOLLY_ROTATE }}
+      />
     </>
   );
 }
@@ -390,7 +401,7 @@ function SkillModal({
   const desc = SKILL_DESCRIPTIONS[skill.label];
 
   return (
-    <div className="fixed inset-0 z-50" onClick={onClose}>
+    <div className="fixed inset-0 z-80" onClick={onClose}>
       <div
         ref={modalRef}
         className="absolute bg-[#1a1025]/90 border border-[var(--lavender-purple)] rounded-2xl shadow-[0_0_30px_rgba(222,201,233,0.4)] w-[400px] max-w-[90%] max-h-[70vh] overflow-y-auto p-6 transition-opacity duration-150 [scrollbar-width:thin] [scrollbar-color:var(--lavender-purple)_transparent]"
@@ -478,7 +489,7 @@ function ConnectorLine({
   const d = buildElbowPath(origin, edgeX, anchorY, FIRST_SEGMENT_LENGTH);
 
   return (
-    <svg className="fixed inset-0 w-full h-full pointer-events-none z-40">
+    <svg className="fixed inset-0 w-full h-full pointer-events-none z-75">
       <path d={d} fill="none" stroke="var(--lavender-purple)" strokeWidth={4} style={{ filter: "blur(4px)" }} opacity={0.5} />
       <path d={d} fill="none" stroke="#dec9e9" strokeWidth={1} />
     </svg>
@@ -488,23 +499,27 @@ function ConnectorLine({
 const FocusBlurOverlay = memo(({ rect }: { rect: DOMRect | null }) => {
   if (!rect) return null;
 
-  const clipStyle = {
-    clipPath: `polygon(
-      0% 0%, 0% 100%, 
-      ${rect.left}px 100%, 
-      ${rect.left}px ${rect.top}px, 
-      ${rect.left + rect.width}px ${rect.top}px, 
-      ${rect.left + rect.width}px ${rect.top + rect.height}px, 
-      ${rect.left}px ${rect.top + rect.height}px, 
-      ${rect.left}px 100%, 
-      100% 100%, 100% 0%
-    )`,
-  };
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const size = Math.min(rect.width, rect.height);
+
+  const innerRadius = size * 0.30;
+  const outerRadius = size * 0.52;
+
+  const mask = `radial-gradient(circle at ${cx}px ${cy}px, transparent ${innerRadius}px, black ${outerRadius}px)`;
 
   return (
     <div
-      className="fixed inset-0 z-30 pointer-events-none backdrop-blur-md bg-black/20 transition-opacity duration-300"
-      style={clipStyle}
+      className="fixed inset-0 z-70 pointer-events-none backdrop-blur-lg bg-black/40 transition-opacity duration-300"
+      style={{
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        margin: 0,
+        maskImage: mask,
+        WebkitMaskImage: mask,
+      }}
     />
   );
 });
@@ -523,6 +538,7 @@ const SOFT_CRYSTALS: { geometry: GeometryType; cameraPosition: [number, number, 
   { geometry: "octahedron2", cameraPosition: [0, 11, 0] },
   { geometry: "octahedron3", cameraPosition: [0, 11, 0] },
 ];
+
 
 export default function CrystalScene() {
   const tetraViewRef = useRef<HTMLDivElement>(null);
@@ -635,7 +651,7 @@ export default function CrystalScene() {
   const isCrystalFrozen = (geometry: GeometryType) => selected?.geometry === geometry || !isInViewport;
 
   return (
-    <div ref={containerRef} className="relative w-full py-8 space-y-12">
+    <div ref={containerRef} className="relative w-full py-8 pt-20 sm:pt-8 space-y-12">
       <section className="w-full max-w-[96rem] mx-auto px-4 sm:px-8">
         <div className="flex flex-col items-center mb-6 text-center">
           <h2 className="text-3xl font-bold text-lilac-1000 mb-2">Technical Skills</h2>
@@ -659,7 +675,7 @@ export default function CrystalScene() {
               <View
                 key={geometry}
                 ref={viewRefsByGeometry[geometry]}
-                className="relative w-full h-[350px] sm:h-full overflow-visible"
+                className="relative w-full h-[350px] sm:h-full overflow-visible touch-pan-y"
               >
                 {hasMounted && (
                   <SceneContent
@@ -680,7 +696,7 @@ export default function CrystalScene() {
               <View
                 key={geometry}
                 ref={viewRefsByGeometry[geometry]}
-                className="relative w-full max-w-md h-[350px] sm:h-full overflow-visible"
+                className="relative w-full max-w-md h-[350px] sm:h-full overflow-visible touch-pan-y"
               >
                 {hasMounted && (
                   <SceneContent
@@ -712,7 +728,7 @@ export default function CrystalScene() {
               <View
                 key={geometry}
                 ref={viewRefsByGeometry[geometry]}
-                className="relative w-full h-[350px] sm:h-full"
+                className="relative w-full h-[350px] sm:h-full touch-pan-y"
               >
                 {hasMounted && (
                   <SceneContent
@@ -746,14 +762,27 @@ export default function CrystalScene() {
       )}
 
       {/* Overlay et Modale */}
-      <FocusBlurOverlay rect={activeRect} />
+      {typeof document !== "undefined" &&
+        createPortal(
+          <>
+            <FocusBlurOverlay rect={activeRect} />
 
-      {selected && (
-        <>
-          <SkillModal skill={selected} modalRef={modalRef} style={modalStyle} onClose={closeModal} />
-          {modalStyle && <ConnectorLine origin={selected.origin} target={modalStyle} />}
-        </>
-      )}
+            {selected && (
+              <>
+                <SkillModal
+                  skill={selected}
+                  modalRef={modalRef}
+                  style={modalStyle}
+                  onClose={closeModal}
+                />
+                {modalStyle && (
+                  <ConnectorLine origin={selected.origin} target={modalStyle} />
+                )}
+              </>
+            )}
+          </>,
+          document.body
+        )}
     </div>
   );
 }

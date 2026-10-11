@@ -7,7 +7,7 @@ function Experiences() {
         <section className="mx-auto w-full max-w-6xl px-6 pb-24 pt-12 text-white sm:px-10">
             <header className="mx-auto mb-16 max-w-2xl text-center">
 
-                <h1 className="text-4xl font-bold text-lilac-1000 mb-2">
+                <h1 className="text-4xl font-bold text-lilac-1000 mb-2 pt-11 sm:pt-8">
                     Experiences
                 </h1>
                 <p className="mt-5 text-base leading-7 text-lilac-200">
@@ -63,7 +63,7 @@ function Experiences() {
                             className={`relative pl-14 sm:flex sm:items-center sm:gap-12 sm:pl-0 ${index % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
                                 }`}
                         >
-                            <div className="absolute left-0 top-8 z-10 flex h-11 w-11 items-center justify-center rounded-full border-4 border-black bg-lilac-950 text-lilac-1100` shadow-[0_0_18px_var(--lavender-purple)] sm:static sm:shrink-0">
+                            <div className="absolute left-0 top-8 z-10 flex h-11 w-11 items-center justify-center rounded-full border-4 border-black bg-lilac-950 text-lilac-1100 shadow-[0_0_18px_var(--lavender-purple)] sm:static sm:shrink-0">
                                 <Icon size={20} aria-hidden="true" />
                             </div>
 
@@ -114,7 +114,7 @@ function Experiences() {
                                                 className="inline-flex items-center gap-2"
                                             >
                                                 <FileText size={18} aria-hidden="true" />
-                                                <span>View the work placement report</span>
+                                                <span>View the report</span>
                                             </a>
                                         </Button>
                                     </div>

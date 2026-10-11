@@ -2,12 +2,12 @@ import { IoLogoLinkedin } from "react-icons/io";
 import { FaGithub } from "react-icons/fa";
 import { AtSign } from "lucide-react";
 import ContactDialog from "@/components/Form/ContactDialog";
-import { useLocation } from "react-router-dom";
+
 
 export default function Footer() {
 
-  const { pathname } = useLocation();
-  const isHome = pathname === "/";
+  
+  
 
   return (
     <footer className="hidden md:flex md:fixed md:bottom-0 left-0 w-full z-50 isolate overflow-visible bg-[#1a1025] text-white/80 px-10 py-4 flex-col sm:flex-row justify-between gap-10 before:absolute before:inset-x-0 before:-top-8 before:h-8 before:bg-[#1a1025] before:content-['']">

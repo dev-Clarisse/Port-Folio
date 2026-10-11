@@ -150,3 +150,7 @@ npm install react-router-dom
 
 - npx vercel login
 - npx vercel --prod
+
+# pour voir sur téléphone
+
+.\ngrok http 5173

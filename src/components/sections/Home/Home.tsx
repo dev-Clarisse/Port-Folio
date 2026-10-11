@@ -2,14 +2,12 @@ import '@/App.css';
 import FlowersGL from "@/components/3D/FlowersGL";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Sound } from "@/Hooks/Sound";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { navItems } from "@/data/navItems";
 
 function Home() {
     const navigate = useNavigate();
-    const playClick = Sound("/sounds/clic.mp3");
-
+    
     useEffect(() => {
         const originalBody = document.body.style.overflow;
         const originalHtml = document.documentElement.style.overflow;
@@ -54,7 +52,7 @@ function Home() {
 
 
             {/* ───────── Boutons desktop (inchangés) ───────── */}
-            <div className="z-10 hidden md:flex flex-wrap justify-center gap-3 md:max-w-3xl xl:max-w-5xl xl:flex-nowrap md:mt-60 xl:translate-x-20">
+            <div className="z-10 hidden md:flex flex-wrap justify-center gap-3 md:max-w-3xl xl:max-w-5xl xl:flex-nowrap md:mt-60 xl:translate-x-48">
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     return (
