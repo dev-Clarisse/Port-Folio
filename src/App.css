@@ -187,7 +187,7 @@
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @media (max-width: 767px) {
@@ -202,6 +202,8 @@
   width: 100%;
   flex: 1;
   background: #000000;
+  /* Empêche les décors qui débordent (chemin fleuri, animations) de créer un scroll horizontal */
+  overflow-x: clip;
 }
 
 .crystal-layer {

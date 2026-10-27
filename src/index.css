@@ -12,6 +12,7 @@
   --color-ring: var(--ring);
   --color-border: var(--border);
   --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
   --color-primary-foreground: var(--primary-foreground);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
@@ -40,6 +41,7 @@
   --primary: var(--deep-lilac-3);
   --primary-foreground: var(--thistle);
   --radius: 0.625rem;
+  --muted: oklch(0.97 0 0);
   --thistle: #dec9e9ff;
   --thistle-2: #dac3e8ff;
   --wisteria: #d2b7e5ff;
@@ -71,10 +73,7 @@
   }
 }
 
-* {
-  cursor: none;
-}
-
+/* Curseur natif masqué seulement là où le curseur fleur s'affiche */
 @media (pointer: fine) {
   * {
     cursor: none;

@@ -512,11 +512,6 @@ const FocusBlurOverlay = memo(({ rect }: { rect: DOMRect | null }) => {
     <div
       className="fixed inset-0 z-70 pointer-events-none backdrop-blur-lg bg-black/40 transition-opacity duration-300"
       style={{
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        margin: 0,
         maskImage: mask,
         WebkitMaskImage: mask,
       }}
@@ -749,7 +744,7 @@ export default function CrystalScene() {
       {hasMounted && (
         <Canvas
           dpr={[1, 1.5]}
-          style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", pointerEvents: "none", zIndex: 10 }}
+          style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 10 }}
           eventSource={containerRef as React.RefObject<HTMLElement>}
           eventPrefix="client"
           frameloop={isInViewport ? "always" : "demand"}

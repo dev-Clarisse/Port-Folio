@@ -1,5 +1,6 @@
 import '@/App.css'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
+import { useScrollLock } from "@/Hooks/ScrollLock";
 import { Button } from "@/components/ui/button"
 import { Sound } from "@/Hooks/Sound"
 
@@ -52,16 +53,7 @@ function Academic() {
         return () => window.removeEventListener('resize', updatePoints);
     }, []);
 
-    useEffect(() => {
-        const originalBody = document.body.style.overflow;
-        const originalHtml = document.documentElement.style.overflow;
-        document.body.style.overflow = "hidden";
-        document.documentElement.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = originalBody;
-            document.documentElement.style.overflow = originalHtml;
-        };
-    }, []);
+    useScrollLock();
 
     return (
         <div ref={containerRef} className="relative max-w-4xl mx-auto px-4 py-16 md:py-12 min-h-dvh md:min-h-screen overflow-hidden md:overflow-visible flex flex-col justify-center items-center">
@@ -125,8 +117,8 @@ function Academic() {
                                 <p className="text-sm text-[var(--white)]/70">
                                     4th year
                                 </p>
-                                <div className="flex gap-4 flex-1 min-h-0 overflow-y-auto">
-                                    <div className="flex-column w-full">
+                                <div className="flex flex-col sm:flex-row gap-4 flex-1 min-h-0 overflow-y-auto">
+                                    <div className="w-full">
                                         <Accordion type="single" collapsible className="w-full">
                                             <AccordionItem value="java" className="border-lilac-800">
                                                 <AccordionTrigger>Java Programming Language</AccordionTrigger>
@@ -159,7 +151,7 @@ function Academic() {
                                             </AccordionItem>
                                         </Accordion>
                                     </div>
-                                    <div className="flex-column w-full">
+                                    <div className="w-full">
                                         <Accordion type="single" collapsible className="w-full">
                                             <AccordionItem value="git" className="border-lilac-800">
                                                 <AccordionTrigger>Git and Version Control</AccordionTrigger>

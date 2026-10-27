@@ -2,24 +2,15 @@ import '@/App.css';
 import imageMe from '@/assets/me2.jpeg';
 import FlowerBoxMe from '@/components/Box/FlowerBoxMe';
 import { Heart } from "lucide-react";
-import { useEffect } from "react";
+import { useScrollLock } from "@/Hooks/ScrollLock";
 
 function AboutMe() {
 
-    useEffect(() => {
-        const originalBody = document.body.style.overflow;
-        const originalHtml = document.documentElement.style.overflow;
-        document.body.style.overflow = "hidden";
-        document.documentElement.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = originalBody;
-            document.documentElement.style.overflow = originalHtml;
-        };
-    }, []);
+    useScrollLock();
 
 
     return (
-        <div className="w-full h-dvh md:h-full overflow-hidden flex items-center justify-center px-4 py-16 sm:px-8 md:p-8 md:translate-y-30">
+        <div className="w-full min-h-dvh md:min-h-0 md:h-full overflow-hidden flex items-center justify-center px-4 py-16 sm:px-8 md:p-8 md:translate-y-30">
             <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
 
                 <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 shrink-0 md:-translate-x-20 animate-slide-in-left">

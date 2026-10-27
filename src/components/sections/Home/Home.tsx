@@ -2,26 +2,17 @@ import '@/App.css';
 import FlowersGL from "@/components/3D/FlowersGL";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useEffect} from "react";
+import { useScrollLock } from "@/Hooks/ScrollLock";
 import { navItems } from "@/data/navItems";
 
 function Home() {
     const navigate = useNavigate();
     
-    useEffect(() => {
-        const originalBody = document.body.style.overflow;
-        const originalHtml = document.documentElement.style.overflow;
-        document.body.style.overflow = "hidden";
-        document.documentElement.style.overflow = "hidden";
-        return () => {
-            document.body.style.overflow = originalBody;
-            document.documentElement.style.overflow = originalHtml;
-        };
-    }, []);
+    useScrollLock();
 
 
     return (
-        <div className="relative isolate h-dvh md:h-auto md:min-h-dvh w-full flex flex-col items-center justify-center gap-4 md:gap-0 overflow-hidden px-4 py-16 md:py-12">
+        <div className="relative isolate min-h-dvh w-full flex flex-col items-center justify-center gap-4 md:gap-0 overflow-hidden px-4 py-16 md:py-12">
 
             {/* ───────── Fleur 3D ───────── */}
             <div className="
@@ -41,10 +32,11 @@ function Home() {
                 text-[clamp(1.6rem,7.5vw,2.25rem)] leading-snug
                 max-w-xs sm:max-w-md
                 m-0
-                md:text-2xl lg:text-5xl
-                md:max-w-3xl lg:max-w-4xl
+                md:text-4xl min-[90rem]:text-5xl
+                md:max-w-none min-[90rem]:max-w-4xl
                 md:mt-0 md:mb-0
-                md:absolute md:top-1/3 md:right-[10%] md:left-auto md:translate-x-6
+                md:absolute md:top-1/3
+                md:left-1/2 md:right-[4%] min-[90rem]:left-auto min-[90rem]:right-[10%] min-[90rem]:translate-x-6
             ">
                 ❝It takes a whole lifetime to learn how to live.❞
             </h1>
@@ -52,7 +44,7 @@ function Home() {
 
 
             {/* ───────── Boutons desktop (inchangés) ───────── */}
-            <div className="z-10 hidden md:flex flex-wrap justify-center gap-3 md:max-w-3xl xl:max-w-5xl xl:flex-nowrap md:mt-60 xl:translate-x-48">
+            <div className="z-10 hidden md:flex flex-wrap justify-center gap-3 md:max-w-3xl min-[90rem]:max-w-5xl min-[90rem]:flex-nowrap md:mt-60 md:portrait:mt-104 min-[90rem]:translate-x-48">
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     return (
