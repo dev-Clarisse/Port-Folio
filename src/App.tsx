@@ -4,9 +4,10 @@ import { Routes, Route } from "react-router-dom";
 import './App.css'
 import Background from './components/layout/Background/Background'
 import Cursor from "./components/layout/Cursor/Cursor"
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { lazy, Suspense } from "react";
 import BackButton from "./components/layout/BackButton/BackButton"
 import MobileMenu from "./components/layout/MobileMenu/MobileMenu";
+import MusicToggle from "./components/layout/MusicToggle/MusicToggle";
 
 
 const Home = lazy(() => import("./components/sections/Home/Home"));
@@ -20,33 +21,13 @@ const Challenges = lazy(() => import("./components/sections/Challenges/Challenge
 
 function App() {
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (audioRef.current) {
-        audioRef.current.volume = 0.3; 
-        audioRef.current.play().catch((err) => console.log("Lecture bloquée :", err));
-      }
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("keydown", handleFirstInteraction);
-    };
-
-    window.addEventListener("click", handleFirstInteraction);
-    window.addEventListener("keydown", handleFirstInteraction);
-
-    return () => {
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("keydown", handleFirstInteraction);
-    };
-  }, []);
 
   return (
 
     <div className="min-h-dvh flex flex-col">
-      <audio ref={audioRef} src="/sounds/chill.mp3" loop preload="none" />
       <main className="flex-1 flex flex-col pb-0 md:pb-16.25">
         <Cursor />
+        <MusicToggle />
         <MobileMenu />
         <Background>
           <BackButton />
